@@ -1,0 +1,18 @@
+name: simpleshopgui
+main: simpleshopgui.Plugin
+version: 1.0.0
+api-version: 1.21
+softdepend: [Vault]
+commands:
+  shop:
+    description: 'The /shop command'
+    usage: '/<command>'
+    permission: simpleshopgui.commands.shop
+  sell:
+    description: 'The /sell command'
+    usage: '/<command>'
+    permission: simpleshopgui.commands.sell
+  listed:
+    description: 'The /listed command'
+    usage: '/<command>'
+    permission: simpleshopgui.commands.listed

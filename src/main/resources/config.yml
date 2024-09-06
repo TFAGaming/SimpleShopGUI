@@ -1,0 +1,144 @@
+database:
+  provider: "sqlite"
+  path: "/database.db"
+
+shop:
+  max_items_duration: 604800000 # 1 week
+  show_buy_notifications: true
+  time_remaining_format: "%days% days, %hours% hours, %minutes% minutes, %seconds% seconds"
+
+gui:
+  shop:
+    title: "&9Shop"
+    contents:
+      BUILDING_BLOCKS:
+        displayname: "&2Building Blocks"
+        lore:
+          - ""
+          - "&7Click to Open"
+        material: GRASS_BLOCK
+      TOOLS:
+        displayname: "&fTools"
+        lore:
+          - ""
+          - "&7Click to Open"
+        material: IRON_PICKAXE
+      FOOD:
+        displayname: "&dFood"
+        lore:
+          - ""
+          - "&7Click to Open"
+        material: COOKED_BEEF
+      MINERALS:
+        displayname: "&bMinerals"
+        lore:
+          - ""
+          - "&7Click to Open"
+        material: DIAMOND
+      NATURAL:
+        displayname: "&aNatural"
+        lore:
+          - ""
+          - "&7Click to Open"
+        material: OAK_SAPLING
+      REDSTONE:
+        displayname: "&cRedstone"
+        lore:
+          - ""
+          - "&7Click to Open"
+        material: REDSTONE
+      MISCELLANEOUS:
+        displayname: "&6Miscellaneous"
+        lore:
+          - ""
+          - "&7Click to Open"
+        material: LAVA_BUCKET
+      MY_PROFILE:
+        displayname: "&9My Profile"
+        lore:
+          - "&aPlayername: &f%player_name%"
+          - "&aBalance: &f$%player_balance%"
+        material: "PLAYERHEAD-adb0e5c6f99e66b74fa84277894b7e4b8f09b2452fb7e486d6ee42b045c26137"
+      HELP:
+        displayname: "&7Help?"
+        lore:
+          - "&7• &9How to buy an item?"
+          - "&7> &aSelect a category, search for an item you want"
+          - "&ato buy, select the item, and then buy it!"
+          - ""
+          - "&7• &9How to sell an item?"
+          - "&7> &aHold an item that you want to sell and run the"
+          - "&afollowing command: &7/sell [price]"
+          - "&aExamples: &7/price 1200&a, &7/price 1.2k"
+          - ""
+          - "&7• &9How do I get my items back?"
+          - "&7> &aUse the following command: &7/listed"
+        material: "PLAYERHEAD-2705fd94a0c431927fb4e639b0fcfb49717e412285a02b439e0112da22b2e2ec"
+  shop_category:
+    titles:
+      BUILDING_BLOCKS: "&9Shop &8> &2Building Blocks"
+      TOOLS: "&9Shop &8> &fTools"
+      FOOD: "&9Shop &8> &dFood"
+      MINERALS: "&9Shop &8> &bMinerals"
+      NATURAL: "&9Shop &8> &aNatural"
+      REDSTONE: "&9Shop &8> &cRedstone"
+      MISCELLANEOUS: "&9Shop &8> &6Miscellaneous"
+    contents:
+      ITEM:
+        lore:
+          - ""
+          - "&7• &aSeller: &f%seller_name%"
+          - "&7• &aPrice: &f$%item_price%"
+          - "&7• &aExpires in: &f%item_expires%"
+          - ""
+          - "&7Click to Buy"
+
+  shop_buy:
+    title: "&9Buy %item_amount%x %item_name%"
+    contents:
+      CANCEL:
+        displayname: "&cCancel"
+        lore:
+          - ""
+          - "&7Click to Cancel"
+        material: RED_STAINED_GLASS_PANE
+      ITEM:
+        __IF_SHULKER_IS_EMPTY__:
+          lore:
+            - "&7(The Shulker Box is Empty)"
+        lore:
+          - ""
+          - "&7• &aPrice: &f$%item_price%"
+      BUY:
+        displayname: "&aBuy"
+        lore:
+          - ""
+          - "&7Click to Buy the item"
+        material: LIME_STAINED_GLASS_PANE
+
+  listed_items:
+    title: "&9Listed & Expired Items"
+    contents:
+      ITEM:
+        lore:
+          - ""
+          - "&7• &aExpires in: &f%item_expires%"
+          - ""
+          - "&7Click to Remove"
+
+messages:
+  commands:
+    sell:
+      no_item_in_hand: "&8[&9Shop&8] &cYou are not holding an item to sell!"
+      no_price_provided: "&8[&9Shop&8] &cYou must provide the price of the item! &7/sell [price]"
+      price_error: "&8[&9Shop&8] &cThe price of the item must be a positive integer and/or end with a valid suffix (k, M, B, T, or Q)."
+      item_sold: "&8[&9Shop&8] &aThe item &b%item_amount%x %item_name% &ais now listed in the shop!"
+  guis:
+    buy:
+      invalid_item: "&8[&9Shop&8] &cThe item does not exist! The seller has removed the item, or someone else purchased the item."
+      item_expired: "&8[&9Shop&8] &cThe item is expired; you cannot buy it."
+      inventory_full: "&8[&9Shop&8] &cYour inventory is full! Please leave at least one slot empty."
+      player_is_item_seller: "&8[&9Shop&8] &cYou cannot buy the items that you are currently selling!"
+      too_expensive: "&8[&9Shop&8] &cYou don't have enough money to buy this item! Your current balance: $%player_balance%"
+  notifications:
+    player_buy: "&8[&9Shop&8] &aYour &b%item_amount%x %item_name% &ahas been purchased by &b%buyer_name% &afor $%item_price%!"

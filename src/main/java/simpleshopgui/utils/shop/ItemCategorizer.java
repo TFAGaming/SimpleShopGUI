@@ -1,0 +1,168 @@
+package simpleshopgui.utils.shop;
+
+import org.bukkit.Material;
+
+import com.google.common.collect.Lists;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class ItemCategorizer {
+    private static final Map<Material, String> map = new HashMap<>();
+
+    static {
+        for (Material material : Material.values()) {
+            if (isTool(material)) {
+                map.put(material, "Tools");
+            } else if (isOre(material)) {
+                map.put(material, "Ore");
+            } else if (isNatural(material)) {
+                map.put(material, "Natural");
+            } else if (isRedstone(material)) {
+                map.put(material, "Redstone");
+            } else if (material.isEdible()) {
+                map.put(material, "Food");
+            } else if (material.isBlock()) {
+                map.put(material, "Building Blocks");
+            } else {
+                map.put(material, "Miscellaneous");
+            }
+        }
+    }
+
+    public static String getCategory(Material material) {
+        return map.getOrDefault(material, "Miscellaneous");
+    }
+
+    private static boolean isTool(Material material) {
+        return material.name().endsWith("_SWORD") || material.name().endsWith("_AXE") ||
+                material.name().endsWith("_PICKAXE") || material.name().endsWith("_SHOVEL") ||
+                material.name().endsWith("_HOE") || material.name().contains("HELMET") ||
+                material.name().contains("CHESTPLATE") || material.name().contains("LEGGINGS") ||
+                material.name().contains("BOOTS") || material.name().endsWith("_HORSE_ARMOR") ||
+                material.equals(Material.MACE) || material.equals(Material.SHIELD) ||
+                material.equals(Material.BRUSH) || material.equals(Material.SHEARS) ||
+                material.equals(Material.FISHING_ROD);
+    }
+
+    private static boolean isOre(Material material) {
+        return Lists.newArrayList(
+                Material.DIAMOND,
+                Material.DIAMOND_ORE,
+                Material.EMERALD,
+                Material.EMERALD_ORE,
+                Material.LAPIS_LAZULI,
+                Material.LAPIS_ORE,
+                Material.IRON_INGOT,
+                Material.IRON_INGOT,
+                Material.IRON_ORE,
+                Material.COPPER_INGOT,
+                Material.COPPER_ORE,
+                Material.GOLD_INGOT,
+                Material.GOLD_NUGGET,
+                Material.GOLD_ORE,
+                Material.NETHERITE_SCRAP,
+                Material.NETHERITE_INGOT,
+                Material.ANCIENT_DEBRIS,
+                Material.COAL,
+                Material.COAL_ORE,
+                Material.CHARCOAL,
+                Material.QUARTZ,
+                Material.NETHER_QUARTZ_ORE,
+                Material.AMETHYST_SHARD,
+                Material.RAW_COPPER,
+                Material.RAW_COPPER_BLOCK,
+                Material.RAW_GOLD,
+                Material.RAW_COPPER_BLOCK,
+                Material.RAW_IRON,
+                Material.RAW_IRON_BLOCK).contains(material);
+    }
+
+    private static boolean isNatural(Material material) {
+        if (Lists.newArrayList(
+                Material.CLAY,
+                Material.PODZOL,
+                Material.BAMBOO,
+                Material.CACTUS,
+                Material.SUGAR_CANE,
+                Material.BROWN_MUSHROOM,
+                Material.RED_MUSHROOM,
+                Material.VINE,
+                Material.SEAGRASS,
+                Material.TALL_SEAGRASS,
+                Material.SEA_PICKLE,
+                Material.KELP,
+                Material.DEAD_BUSH,
+                Material.FLOWERING_AZALEA,
+                Material.AZALEA,
+                Material.COBWEB,
+                Material.FLOWER_POT,
+                Material.LILY_PAD,
+                // Flowers ↓
+                Material.DANDELION,
+                Material.POPPY,
+                Material.BLUE_ORCHID,
+                Material.ALLIUM,
+                Material.AZURE_BLUET,
+                Material.RED_TULIP,
+                Material.ORANGE_TULIP,
+                Material.WHITE_TULIP,
+                Material.PINK_TULIP,
+                Material.OXEYE_DAISY,
+                Material.CORNFLOWER,
+                Material.LILY_OF_THE_VALLEY,
+                Material.WITHER_ROSE,
+                Material.SUNFLOWER,
+                Material.LILAC,
+                Material.ROSE_BUSH,
+                Material.PEONY).contains(material)) {
+            return true;
+        }
+
+        if (material.name().endsWith("_PLANT") ||
+                material.name().endsWith("_FLOWER") ||
+                material.name().contains("MUSHROOM") ||
+                material.name().contains("LEAVES") ||
+                material.name().contains("SAPLING") ||
+                material.name().contains("VINE") ||
+                material.name().contains("GRASS") ||
+                material.name().contains("FUNGUS") ||
+                material.name().contains("SPROUT") ||
+                material.name().contains("HANGING_ROOTS") ||
+                material.name().contains("MOSS") ||
+                material.name().contains("LEAVES") ||
+                material.name().contains("LILY")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isRedstone(Material material) {
+        return Lists.newArrayList(
+                Material.REDSTONE,
+                Material.REDSTONE_BLOCK,
+                Material.REDSTONE_TORCH,
+                Material.REPEATER,
+                Material.COMPARATOR,
+                Material.TARGET,
+                Material.LEVER,
+                Material.TRIPWIRE_HOOK,
+                Material.DAYLIGHT_DETECTOR,
+                Material.CRAFTER,
+                Material.DISPENSER,
+                Material.DROPPER,
+                Material.PISTON,
+                Material.STICKY_PISTON,
+                Material.TRAPPED_CHEST,
+                Material.OBSERVER,
+                Material.NOTE_BLOCK,
+                Material.REDSTONE_LAMP,
+                Material.TRIPWIRE_HOOK,
+                Material.HOPPER,
+                Material.SCULK_SENSOR,
+                Material.CALIBRATED_SCULK_SENSOR).contains(material) || material.name().endsWith("_PRESSURE_PLATE")
+                || material.name().endsWith("_BUTTON") || material.name().endsWith("_COPPER_BULB");
+    }
+
+}
