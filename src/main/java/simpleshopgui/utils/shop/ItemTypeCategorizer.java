@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemCategorizer {
+public class ItemTypeCategorizer {
     private static final Map<Material, String> map = new HashMap<>();
 
     static {
@@ -42,30 +42,41 @@ public class ItemCategorizer {
                 material.name().contains("BOOTS") || material.name().endsWith("_HORSE_ARMOR") ||
                 material.equals(Material.MACE) || material.equals(Material.SHIELD) ||
                 material.equals(Material.BRUSH) || material.equals(Material.SHEARS) ||
-                material.equals(Material.FISHING_ROD);
+                material.equals(Material.FISHING_ROD) || material.equals(Material.CARROT_ON_A_STICK) ||
+                material.equals(Material.WARPED_FUNGUS_ON_A_STICK) || material.equals(Material.WIND_CHARGE) ||
+                material.equals(Material.COMPASS) || material.equals(Material.RECOVERY_COMPASS) ||
+                material.equals(Material.ELYTRA) || material.equals(Material.FLINT_AND_STEEL) ||
+                material.equals(Material.LEAD);
     }
 
     private static boolean isOre(Material material) {
         return Lists.newArrayList(
                 Material.DIAMOND,
                 Material.DIAMOND_ORE,
+                Material.DEEPSLATE_DIAMOND_ORE,
                 Material.EMERALD,
                 Material.EMERALD_ORE,
+                Material.DEEPSLATE_EMERALD_ORE,
                 Material.LAPIS_LAZULI,
                 Material.LAPIS_ORE,
+                Material.DEEPSLATE_LAPIS_ORE,
                 Material.IRON_INGOT,
                 Material.IRON_INGOT,
                 Material.IRON_ORE,
+                Material.DEEPSLATE_IRON_ORE,
                 Material.COPPER_INGOT,
                 Material.COPPER_ORE,
+                Material.DEEPSLATE_COPPER_ORE,
                 Material.GOLD_INGOT,
                 Material.GOLD_NUGGET,
                 Material.GOLD_ORE,
+                Material.DEEPSLATE_GOLD_ORE,
                 Material.NETHERITE_SCRAP,
                 Material.NETHERITE_INGOT,
                 Material.ANCIENT_DEBRIS,
                 Material.COAL,
                 Material.COAL_ORE,
+                Material.DEEPSLATE_COAL_ORE,
                 Material.CHARCOAL,
                 Material.QUARTZ,
                 Material.NETHER_QUARTZ_ORE,
@@ -90,14 +101,20 @@ public class ItemCategorizer {
                 Material.VINE,
                 Material.SEAGRASS,
                 Material.TALL_SEAGRASS,
+                Material.SHORT_GRASS,
                 Material.SEA_PICKLE,
                 Material.KELP,
                 Material.DEAD_BUSH,
                 Material.FLOWERING_AZALEA,
                 Material.AZALEA,
                 Material.COBWEB,
-                Material.FLOWER_POT,
                 Material.LILY_PAD,
+                Material.SPORE_BLOSSOM,
+                Material.PINK_PETALS,
+                Material.SCULK_VEIN,
+                Material.LARGE_FERN,
+                Material.NETHER_WART,
+                Material.COCOA_BEANS,
                 // Flowers ↓
                 Material.DANDELION,
                 Material.POPPY,
@@ -125,13 +142,12 @@ public class ItemCategorizer {
                 material.name().contains("LEAVES") ||
                 material.name().contains("SAPLING") ||
                 material.name().contains("VINE") ||
-                material.name().contains("GRASS") ||
                 material.name().contains("FUNGUS") ||
                 material.name().contains("SPROUT") ||
                 material.name().contains("HANGING_ROOTS") ||
                 material.name().contains("MOSS") ||
                 material.name().contains("LEAVES") ||
-                material.name().contains("LILY")) {
+                material.name().contains("LILY") || material.name().endsWith("_SEEDS")) {
             return true;
         }
 

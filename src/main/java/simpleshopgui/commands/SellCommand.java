@@ -50,6 +50,14 @@ public class SellCommand implements TabExecutor {
 
             double price = ShopUtils.parseFromStringToDouble(args[0]);
 
+            if (price > Plugin.config.getDouble("shop.max_item_price")) {
+                player.sendMessage(ChatColorTranslator
+                        .translate(Plugin.config.getString("messages.commands.sell.price_over_max").replace(
+                                "%max_price%",
+                                ShopUtils.parseFromDoubleToString(Plugin.config.getDouble("shop.max_item_price")))));
+                return true;
+            }
+
             ItemStack itemStack = itemInHand.clone();
 
             ShopDatabaseManager.addItemToShop(player, itemStack, price);

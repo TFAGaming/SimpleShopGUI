@@ -57,6 +57,6 @@ public class ListedItemsGUI {
 
         pagegui.openInventory(pagegui);
 
-        ShopUtils.setCurrentInventoryId(player, 4);
+        ShopUtils.setCurrentInventoryId(player, 5);
     }
 }

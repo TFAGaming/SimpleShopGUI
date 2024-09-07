@@ -4,21 +4,23 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import com.google.common.collect.Lists;
 
 import simpleshopgui.Plugin;
 import simpleshopgui.managers.ShopDatabaseManager;
 import simpleshopgui.utils.colors.ChatColorTranslator;
 import simpleshopgui.utils.gui.ItemGUI;
 import simpleshopgui.utils.gui.PaginationGUI;
+import simpleshopgui.utils.shop.ItemRarityCategorizer;
 import simpleshopgui.utils.shop.ShopUtils;
 
-public class ShopGUINatural {
-    public static void create(Player player) {
-        List<List<Object>> listed_items = ShopDatabaseManager.getListedItemsByCategory("Natural", false);
+public class ShopGUISpecificItem {
+    public void create(Player player) {
+        Material currenMaterial = ShopGUI.playerCurrentMaterial.get(player.getUniqueId());
+
+        List<List<Object>> listed_items = ShopDatabaseManager.getListedItemsBySpecificMaterial(currenMaterial, false);
 
         listed_items.sort(Comparator.comparingDouble((List<Object> list) -> (double) list.get(4)).reversed());
 
@@ -31,9 +33,10 @@ public class ShopGUINatural {
         }
 
         PaginationGUI pagegui = new PaginationGUI(player, 6,
-                ChatColorTranslator.translate(Plugin.config.getString("gui.shop_category.titles.NATURAL")),
+                ChatColorTranslator.translate(Plugin.config.getString("gui.shop_specific_material.title")
+                        .replace("%item_rarity_color%", ItemRarityCategorizer.getColor(currenMaterial))
+                        .replace("%item_name%", ShopUtils.userFriendlyItemName(currenMaterial.name()))),
                 total_pages);
-        ShopGUI.playerCurrentCategory.put(player.getUniqueId(), "Natural");
 
         List<List<ItemStack>> pages = new ArrayList<>();
 
@@ -48,12 +51,7 @@ public class ShopGUINatural {
 
                 ItemStack item = (ItemStack) each.get(2);
 
-                int itemsCount = ShopDatabaseManager.getListedItemsBySpecificMaterial(item.getType(), false).size();
-
-                page.add(ItemGUI.getItem("&f&r" + ShopUtils.userFriendlyItemName(item.getType().name()),
-                        Plugin.config.getStringList("gui.shop_category.contents.ITEM.lore"),
-                        item.getType().toString(),
-                        Lists.newArrayList(Lists.newArrayList("%items_count%", "" + itemsCount), null)));
+                page.add(ItemGUI.customizedItemShopMeta(item, each, 1, false));
             }
 
             pages.add(page);
@@ -65,6 +63,6 @@ public class ShopGUINatural {
 
         pagegui.openInventory(pagegui);
 
-        ShopUtils.setCurrentInventoryId(player, 2);
+        ShopUtils.setCurrentInventoryId(player, 3);
     }
 }

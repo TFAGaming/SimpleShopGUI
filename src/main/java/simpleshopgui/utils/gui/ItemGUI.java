@@ -26,6 +26,10 @@ public class ItemGUI {
             List<List<Object>> replacements) {
         if (replacements != null) {
             for (List<Object> replacement : replacements) {
+                if (replacement == null) {
+                    continue;
+                }
+
                 String replaced = displayname.replace((String) replacement.get(0), "" + replacement.get(1));
 
                 displayname = replaced;
@@ -35,6 +39,10 @@ public class ItemGUI {
                 List<String> updated_lore = new ArrayList<>(lore);
 
                 for (List<Object> replacement : replacements) {
+                    if (replacement == null) {
+                        continue;
+                    }
+
                     String target = (String) replacement.get(0);
                     String replace = "" + replacement.get(1);
 
@@ -112,21 +120,6 @@ public class ItemGUI {
             List<String> lore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
 
             if (type == 1) {
-                /*
-                 * lore.add("");
-                 * lore.add(ChatColorTranslator.translate(
-                 * "&aSeller: &f" + Bukkit.getOfflinePlayer(UUID.fromString((String)
-                 * itemData.get(1))).getName()));
-                 * lore.add(ChatColorTranslator.translate(
-                 * "&aPrice: &f$" + ShopUtils.parseFromDoubleToString((double)
-                 * itemData.get(3))));
-                 * lore.add(ChatColorTranslator.translate(
-                 * "&aExpires: &f" + ShopUtils.getTimeRemaining((double) itemData.get(5))));
-                 * lore.add("");
-                 * lore.add(ChatColorTranslator.translate(
-                 * isInListedGUI.length > 0 && isInListedGUI[0] ? "&7Click to Remove" :
-                 * "&7Click to Buy"));
-                 */
                 if (isInListedGUI.length > 0 && isInListedGUI[0]) {
                     List<String> lorelist = Plugin.config.getStringList("gui.listed_items.contents.ITEM.lore");
 
@@ -144,7 +137,7 @@ public class ItemGUI {
                                                 ShopUtils.getTimeRemaining((double) itemData.get(5)))));
                     }
                 } else {
-                    List<String> lorelist = Plugin.config.getStringList("gui.shop_category.contents.ITEM.lore");
+                    List<String> lorelist = Plugin.config.getStringList("gui.shop_specific_material.contents.ITEM.lore");
 
                     for (String each : lorelist) {
                         if (!each.contains("&")) {

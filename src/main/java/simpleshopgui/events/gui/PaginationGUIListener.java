@@ -9,7 +9,15 @@ import org.bukkit.inventory.Inventory;
 
 import simpleshopgui.events.gui.paginations.BuyItemGUIListener;
 import simpleshopgui.events.gui.paginations.ListedItemsGUIListener;
+import simpleshopgui.events.gui.paginations.SpecificItemsGUIListener;
 import simpleshopgui.gui.ShopGUI;
+import simpleshopgui.gui.ShopGUIBuildingBlocks;
+import simpleshopgui.gui.ShopGUIFood;
+import simpleshopgui.gui.ShopGUIMinerals;
+import simpleshopgui.gui.ShopGUIMiscellaneous;
+import simpleshopgui.gui.ShopGUINatural;
+import simpleshopgui.gui.ShopGUIRedstone;
+import simpleshopgui.gui.ShopGUITools;
 import simpleshopgui.utils.gui.PaginationGUI;
 import simpleshopgui.utils.shop.ShopUtils;
 
@@ -39,55 +47,124 @@ public class PaginationGUIListener implements Listener {
                     if (event.getSlot() == first_index_last_line) {
                         if (pagegui.getPage() == 0) {
                             ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
+                            ShopGUI.playerCurrentMaterial.remove(player.getUniqueId());
 
                             ShopGUI gui = new ShopGUI(player);
 
                             gui.openInventory();
 
-                            ShopUtils.triggerBuy = false;
+                            ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
                         } else {
                             pagegui.previousPage();
                         }
                     } else if (event.getSlot() == last_index_last_line) {
                         pagegui.nextPage();
                     } else {
-                        if (!ShopUtils.triggerBuy) {
-                            ShopUtils.triggerBuy = true;
+                        if (ShopUtils.playerTriggerBuy.containsKey(player.getUniqueId()) && !ShopUtils.playerTriggerBuy.get(player.getUniqueId())) {
+                            ShopUtils.playerTriggerBuy.put(player.getUniqueId(), true);
                         } else {
-                            ShopUtils.triggerBuy = false;
+                            ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
 
-                            BuyItemGUIListener.listen(event, player, pagegui,
+                            SpecificItemsGUIListener.listen(event, player, pagegui,
                                     ShopGUI.playerCurrentCategory.get(player.getUniqueId()));
                         }
 
                     }
                     break;
-                case 4:
+                case 3:
                     event.setCancelled(true);
 
-                    Inventory inventory_4 = PaginationGUI.playerInventory.get(player.getUniqueId());
-                    int inventory_size_4 = inventory_4.getSize() / 36;
+                    Inventory inventory_3 = PaginationGUI.playerInventory.get(player.getUniqueId());
+                    int inventory_size_3 = inventory_3.getSize() / 36;
 
-                    int last_index_last_line_4 = (9 * 6 * inventory_size_4) - 1;
-                    int first_index_last_line_4 = last_index_last_line_4 - 8;
-                    int centered_index_last_line_4 = last_index_last_line_4 - 4;
+                    int last_index_last_line_3 = (9 * 6 * inventory_size_3) - 1;
+                    int first_index_last_line_3 = last_index_last_line_3 - 8;
+                    int centered_index_last_line_3 = last_index_last_line_3 - 4;
 
-                    PaginationGUI pagegui_4 = PaginationGUI.instance.get(player.getUniqueId());
+                    PaginationGUI pagegui_3 = PaginationGUI.instance.get(player.getUniqueId());
 
-                    if (event.getSlot() == centered_index_last_line_4) {
+                    if (event.getSlot() == centered_index_last_line_3) {
                         return;
                     }
 
-                    if (event.getSlot() == first_index_last_line_4) {
-                        if (pagegui_4.getPage() == 0) {
+                    if (event.getSlot() == first_index_last_line_3) {
+                        if (pagegui_3.getPage() == 0) {
+                            if (ShopGUI.playerCurrentCategory.containsKey(player.getUniqueId())) {
+                                ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+                                ShopGUI.playerCurrentMaterial.remove(player.getUniqueId());
+
+                                switch (ShopGUI.playerCurrentCategory.get(player.getUniqueId())) {
+                                    case "Building Blocks":
+                                        ShopGUIBuildingBlocks.create(player);
+                                        break;
+                                    case "Tools":
+                                        ShopGUITools.create(player);
+                                        break;
+                                    case "Food":
+                                        ShopGUIFood.create(player);
+                                        break;
+                                    case "Ore":
+                                        ShopGUIMinerals.create(player);
+                                        break;
+                                    case "Natural":
+                                        ShopGUINatural.create(player);
+                                        break;
+                                    case "Redstone":
+                                        ShopGUIRedstone.create(player);
+                                        break;
+                                    case "Miscellaneous":
+                                        ShopGUIMiscellaneous.create(player);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            } else {
+                                ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+                                ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
+                                ShopGUI.playerCurrentMaterial.remove(player.getUniqueId());
+
+                                ShopGUI gui = new ShopGUI(player);
+
+                                gui.openInventory();
+                            }
+
+                            // ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+                        } else {
+                            pagegui_3.previousPage();
+                        }
+                    } else if (event.getSlot() == last_index_last_line_3) {
+                        pagegui_3.nextPage();
+                    } else {
+                        BuyItemGUIListener.listen(event, player, pagegui_3,
+                                ShopGUI.playerCurrentMaterial.get(player.getUniqueId()));
+                    }
+                    break;
+                case 5:
+                    event.setCancelled(true);
+
+                    Inventory inventory_5 = PaginationGUI.playerInventory.get(player.getUniqueId());
+                    int inventory_size_5 = inventory_5.getSize() / 36;
+
+                    int last_index_last_line_5 = (9 * 6 * inventory_size_5) - 1;
+                    int first_index_last_line_5 = last_index_last_line_5 - 8;
+                    int centered_index_last_line_5 = last_index_last_line_5 - 4;
+
+                    PaginationGUI pagegui_5 = PaginationGUI.instance.get(player.getUniqueId());
+
+                    if (event.getSlot() == centered_index_last_line_5) {
+                        return;
+                    }
+
+                    if (event.getSlot() == first_index_last_line_5) {
+                        if (pagegui_5.getPage() == 0) {
                             player.closeInventory();
                         } else {
-                            pagegui_4.previousPage();
+                            pagegui_5.previousPage();
                         }
-                    } else if (event.getSlot() == last_index_last_line_4) {
-                        pagegui_4.nextPage();
+                    } else if (event.getSlot() == last_index_last_line_5) {
+                        pagegui_5.nextPage();
                     } else {
-                        ListedItemsGUIListener.listen(event, player, pagegui_4);
+                        ListedItemsGUIListener.listen(event, player, pagegui_5);
                     }
                     break;
                 default:
@@ -104,9 +181,9 @@ public class PaginationGUIListener implements Listener {
             PaginationGUI.playerInventory.remove(player.getUniqueId());
             PaginationGUI.instance.remove(player.getUniqueId());
 
-            ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
+            //ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
 
-            ShopUtils.triggerBuy = false;
+            //ShopUtils.playerTriggerBuy.remove(player.getUniqueId());
         }
     }
 }

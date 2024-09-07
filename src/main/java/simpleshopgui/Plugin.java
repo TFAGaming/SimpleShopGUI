@@ -21,7 +21,7 @@ public class Plugin extends JavaPlugin {
 
 	public void onEnable() {
 		Console.pluginBanner();
-		Console.warning("Enabling the plugin...");
+		//Console.warning("Enabling the plugin...");
 
 		saveDefaultConfig();
 
@@ -49,7 +49,12 @@ public class Plugin extends JavaPlugin {
 
 		config = Plugin.getPlugin(Plugin.class).getConfig();
 
-		String jdbcUrl = getDataFolder().getAbsolutePath() + config.getString("database.path");
+		String provider = config.getString("database.provider");
+		String jdbcUrl = "";
+
+		if (provider.equalsIgnoreCase("sqlite")) {
+			jdbcUrl = getDataFolder().getAbsolutePath() + "/" + config.getString("database.path");
+		}
 
 		database = new Database(config.getString("database.provider"), jdbcUrl);
 
@@ -75,12 +80,12 @@ public class Plugin extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		Console.warning("Disabling the plugin...");
-		Console.info("The plugin is now disabled.");
+		//Console.warning("Disabling the plugin...");
+		Console.info("SimpleShopGUI is now disabled.");
 	}
 
 	public static String getVersion() {
-		return "1.0.0-prerelease-1";
+		return "1.0.0-prerelease-2";
 	}
 
 	private void disablePlugin() {

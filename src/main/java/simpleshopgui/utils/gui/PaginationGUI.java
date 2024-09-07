@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.common.collect.Lists;
 
+import simpleshopgui.Plugin;
+
 public class PaginationGUI {
     public static Map<UUID, Inventory> playerInventory = new HashMap<>();
     public static Map<UUID, PaginationGUI> instance = new HashMap<>();
@@ -98,15 +100,28 @@ public class PaginationGUI {
         int first_index_last_line = 9 * (inventory_lines - 1);
         int last_index_last_line = (9 * inventory_lines) - 1;
 
-        ItemStack previous_page = ItemGUI.getItem("&9Previous", null, "PLAYERHEAD-86971dd881dbaf4fd6bcaa93614493c612f869641ed59d1c9363a3666a5fa6", null);
-        ItemStack page_information = ItemGUI.getItem("&7Page &3%current_page%&7/&c%total_pages%", null, "PAPER",
+        ItemStack previous_page = ItemGUI.getItem(getConfigString("PREVIOUS_PAGE.displayname"),
+                getConfigStringList("PREVIOUS_PAGE.lore"), getConfigString("PREVIOUS_PAGE.material"), null);
+
+        ItemStack page_information = ItemGUI.getItem(getConfigString("CENTERED_INFO_ITEM.displayname"),
+                getConfigStringList("CENTERED_INFO_ITEM.lore"), getConfigString("CENTERED_INFO_ITEM.material"),
                 Lists.newArrayList(
                         Lists.newArrayList("%current_page%", page_index + 1),
                         Lists.newArrayList("%total_pages%", total_pages)));
-        ItemStack next_page = ItemGUI.getItem("&9Next", null, "PLAYERHEAD-f32ca66056b72863e98f7f32bd7d94c7a0d796af691c9ac3a9136331352288f9", null);
+
+        ItemStack next_page = ItemGUI.getItem(getConfigString("NEXT_PAGE.displayname"),
+                getConfigStringList("NEXT_PAGE.lore"), getConfigString("NEXT_PAGE.material"), null);
 
         inventory.setItem(last_index_last_line, next_page);
         inventory.setItem(first_index_last_line + 4, page_information);
         inventory.setItem(first_index_last_line, previous_page);
+    }
+
+    private String getConfigString(String path) {
+        return Plugin.config.getString("gui.__CONFIG_PAGINATION__." + path);
+    }
+
+    private List<String> getConfigStringList(String path) {
+        return Plugin.config.getStringList("gui.__CONFIG_PAGINATION__." + path);
     }
 }

@@ -21,7 +21,7 @@ public class Console {
                         "  ___) | | | | | | | |_) | |  __/___) | | | | (_) | |_) | |_| | |_| || | \r\n" +
                         " |____/|_|_| |_| |_| .__/|_|\\___|____/|_| |_|\\___/| .__/ \\____|\\___/|___|\r\n" +
                         "                   |_|                            |_|                    " +
-                        "\nCreated by TFAGaming, Version: v" + Plugin.getVersion();
+                        "\nVersion: v" + Plugin.getVersion();
 
         logger.info(line_splitter);
 
@@ -30,6 +30,11 @@ public class Console {
         }
 
         logger.info(line_splitter);
+
+        if (Plugin.getVersion().contains("prerelease")) {
+            warning("The version you are currently using is a pre-release version.");
+            warning("Exploits, Glitches, and Bugs may exist in pre-release versions. Proceed at your own risk!");
+        }
     }
 
     public static void info(String message) {

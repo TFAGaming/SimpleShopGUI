@@ -22,7 +22,19 @@ public class Database {
             if (provider.equalsIgnoreCase("sqlite")) {
                 Connection connection = DriverManager.getConnection("jdbc:sqlite:" + jdbcUrl);
                 this.connection = connection;
-            } else {
+            } /*
+               * else if (provider.equalsIgnoreCase("postgresql")) {
+               * String host = Plugin.config.getString("database.host");
+               * int port = Plugin.config.getInt("database.port");
+               * String database = Plugin.config.getString("database.name");
+               * String username = Plugin.config.getString("database.username");
+               * String password = Plugin.config.getString("database.password");
+               * 
+               * Connection connection = DriverManager.getConnection("jdbc:postgresql://" +
+               * host + ":" + port + "/" + database, username, password);
+               * this.connection = connection;
+               * }
+               */ else {
                 throw new SQLException("Invalid provider \"" + provider + "\"");
             }
         }

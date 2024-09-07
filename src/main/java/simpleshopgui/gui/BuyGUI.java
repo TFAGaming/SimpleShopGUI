@@ -83,7 +83,7 @@ public class BuyGUI {
     public void openInventory() {
         player.openInventory(inventory);
 
-        ShopUtils.setCurrentInventoryId(player, 3);
+        ShopUtils.setCurrentInventoryId(player, 4);
     }
 
     private String getConfigString(String path) {

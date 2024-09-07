@@ -3,17 +3,18 @@ package simpleshopgui.events.gui.paginations;
 import java.util.Comparator;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
 
-import simpleshopgui.gui.BuyGUI;
+import simpleshopgui.gui.ShopGUI;
+import simpleshopgui.gui.ShopGUISpecificItem;
 import simpleshopgui.managers.ShopDatabaseManager;
 import simpleshopgui.utils.gui.PaginationGUI;
 
-public class BuyItemGUIListener {
-    public static void listen(InventoryClickEvent event, Player player, PaginationGUI pagegui, Material material) {
+public class SpecificItemsGUIListener {
+    public static void listen(InventoryClickEvent event, Player player, PaginationGUI pagegui, String category) {
         if (event.getClickedInventory() != null && event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
             return;
         }
@@ -24,7 +25,7 @@ public class BuyItemGUIListener {
             return;
         }
 
-        List<List<Object>> listed_items = ShopDatabaseManager.getListedItemsBySpecificMaterial(material, false);
+        List<List<Object>> listed_items = ShopDatabaseManager.getListedItemsByCategory(category, false);
 
         listed_items.sort(Comparator.comparingDouble((List<Object> list) -> (double) list.get(4)).reversed());
 
@@ -43,9 +44,13 @@ public class BuyItemGUIListener {
             if (itemIndex < listed_items.size() && event.getSlot() < itemsForCurrentPage.size()) {
                 List<Object> item_indexed = listed_items.get(itemIndex);
 
-                BuyGUI gui = new BuyGUI(player, item_indexed);
+                ItemStack item = (ItemStack) item_indexed.get(2);
 
-                gui.openInventory();
+                ShopGUI.playerCurrentMaterial.put(player.getUniqueId(), item.getType());
+
+                ShopGUISpecificItem gui = new ShopGUISpecificItem();
+
+                gui.create(player);
             }
         }
     }

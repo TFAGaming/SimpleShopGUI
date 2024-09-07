@@ -7,6 +7,8 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.google.common.collect.Lists;
+
 import simpleshopgui.Plugin;
 import simpleshopgui.managers.ShopDatabaseManager;
 import simpleshopgui.utils.colors.ChatColorTranslator;
@@ -46,7 +48,12 @@ public class ShopGUIFood {
 
                 ItemStack item = (ItemStack) each.get(2);
 
-                page.add(ItemGUI.customizedItemShopMeta(item, each, 1, false));
+                int itemsCount = ShopDatabaseManager.getListedItemsBySpecificMaterial(item.getType(), false).size();
+
+                page.add(ItemGUI.getItem("&f&r" + ShopUtils.userFriendlyItemName(item.getType().name()),
+                        Plugin.config.getStringList("gui.shop_category.contents.ITEM.lore"),
+                        item.getType().toString(),
+                        Lists.newArrayList(Lists.newArrayList("%items_count%", "" + itemsCount), null)));
             }
 
             pages.add(page);

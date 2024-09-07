@@ -64,7 +64,9 @@ public class NormalGUIListener implements Listener {
                 default:
                     break;
             }
-        } else if (ShopUtils.getCurrentInventoryId(player) == 3) {
+
+            ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+        } else if (ShopUtils.getCurrentInventoryId(player) == 4) {
             event.setCancelled(true);
 
             boolean isShulkerBox = BuyGUI.playerShulkerBoxInventory.get(player.getUniqueId());
@@ -127,9 +129,9 @@ public class NormalGUIListener implements Listener {
                         if (seller != null) {
                             PlayerUtils.addMoneyToPlayer(seller, price);
 
-                            if (seller.isOnline() && Plugin.config.getBoolean("shop.show_buy_notifications")) {
+                            if (seller.isOnline() && Plugin.config.getBoolean("shop.show_buy_notification")) {
                                 Bukkit.getPlayer(seller.getUniqueId()).sendMessage(ChatColorTranslator
-                                        .translate(Plugin.config.getString("messages.notifications.player_buy")
+                                        .translate(Plugin.config.getString("messages.notification.player_buy")
                                                 .replace("%buyer_name%", player.getName())
                                                 .replace("%item_amount%", "" + itemStack.getAmount())
                                                 .replace("%item_name%",
@@ -206,9 +208,9 @@ public class NormalGUIListener implements Listener {
                         if (seller != null) {
                             PlayerUtils.addMoneyToPlayer(seller, price);
 
-                            if (seller.isOnline() && Plugin.config.getBoolean("shop.show_buy_notifications")) {
+                            if (seller.isOnline() && Plugin.config.getBoolean("shop.show_buy_notification")) {
                                 Bukkit.getPlayer(seller.getUniqueId()).sendMessage(ChatColorTranslator
-                                        .translate(Plugin.config.getString("messages.notifications.player_buy")
+                                        .translate(Plugin.config.getString("messages.notification.player_buy")
                                                 .replace("%buyer_name%", player.getName())
                                                 .replace("%item_amount%", "" + itemStack.getAmount())
                                                 .replace("%item_name%",
@@ -236,7 +238,7 @@ public class NormalGUIListener implements Listener {
         Player player = (Player) event.getPlayer();
 
         ShopUtils.removeCurrentInventoryId(player);
-        ShopUtils.triggerBuy = false;
+        ShopUtils.playerTriggerBuy.remove(player.getUniqueId());
     }
 
     private void deletePlayerData(Player player) {

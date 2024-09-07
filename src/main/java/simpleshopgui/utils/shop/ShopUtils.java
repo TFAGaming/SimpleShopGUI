@@ -16,7 +16,7 @@ import com.google.common.collect.Lists;
 import simpleshopgui.Plugin;
 
 public class ShopUtils {
-    public static boolean triggerBuy = false;
+    public static Map<UUID, Boolean> playerTriggerBuy = new HashMap<UUID, Boolean>();
     public static Map<UUID, Integer> inventoryCache = new HashMap<UUID, Integer>();
 
     public static void setCurrentInventoryId(Player player, int id) {

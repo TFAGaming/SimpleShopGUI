@@ -8,7 +8,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
+import simpleshopgui.Plugin;
 import simpleshopgui.managers.ShopDatabaseManager;
+import simpleshopgui.utils.colors.ChatColorTranslator;
 import simpleshopgui.utils.gui.PaginationGUI;
 import simpleshopgui.utils.players.PlayerUtils;
 
@@ -46,7 +48,8 @@ public class ListedItemsGUIListener {
                 player.closeInventory();
 
                 if (!PlayerUtils.hasAvailableSlot(player)) {
-                    player.sendMessage("Your inventory is full!");
+                    player.sendMessage(ChatColorTranslator
+                                    .translate(Plugin.config.getString("messages.guis.listed.inventory_full")));
                     return;
                 }
 

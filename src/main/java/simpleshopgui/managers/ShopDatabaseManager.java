@@ -12,13 +12,14 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import simpleshopgui.Plugin;
 import simpleshopgui.database.ItemSerializer;
-import simpleshopgui.utils.shop.ItemCategorizer;
+import simpleshopgui.utils.shop.ItemTypeCategorizer;
 
 public class ShopDatabaseManager {
     private static final Map<Integer, List<Object>> cache = new HashMap<>();
@@ -83,7 +84,7 @@ public class ShopDatabaseManager {
             statement.setDouble(3, price);
             statement.setDouble(4, System.currentTimeMillis());
             statement.setDouble(5, System.currentTimeMillis() + Plugin.config.getDouble("shop.max_items_duration"));
-            statement.setString(6, ItemCategorizer.getCategory(item.getType()));
+            statement.setString(6, ItemTypeCategorizer.getCategory(item.getType()));
             
             statement.execute();
             statement.close();
@@ -136,8 +137,49 @@ public class ShopDatabaseManager {
         return arraylist;
     }
 
+    public static List<List<Object>> getListedItemsBySpecificMaterial(Material material, boolean showExpired) {
+        List<List<Object>> arraylist = new ArrayList<List<Object>>();
+
+        for (Entry<Integer, List<Object>> entry : cache.entrySet()) {
+            List<Object> data = entry.getValue();
+
+            if (ItemSerializer.deserialize((String) data.get(2)).getType().equals(material)) {
+                List<Object> sub_arraylist = new ArrayList<Object>();
+
+                sub_arraylist.add(data.get(0));
+                sub_arraylist.add(data.get(1));
+                sub_arraylist.add(ItemSerializer.deserialize((String) data.get(2)));
+                sub_arraylist.add(data.get(3));
+                sub_arraylist.add(data.get(4));
+                sub_arraylist.add(data.get(5));
+                sub_arraylist.add(data.get(6));
+
+                arraylist.add(sub_arraylist);
+            }
+        }
+
+        if (showExpired) {
+            return arraylist;
+        } else {
+            List<List<Object>> filteredList = new ArrayList<List<Object>>();
+
+            for (List<Object> sublist : arraylist) {
+                if (!sublist.isEmpty()) {
+                    double time = (double) sublist.get(5);
+
+                    if (time >= System.currentTimeMillis()) {
+                        filteredList.add(sublist);
+                    }
+                }
+            }
+
+            return filteredList;
+        }
+    }
+
     public static List<List<Object>> getListedItemsByCategory(String category, boolean showExpired) {
         List<List<Object>> arraylist = new ArrayList<List<Object>>();
+        List<Material> materialsList = new ArrayList<Material>();
 
         for (Entry<Integer, List<Object>> entry : cache.entrySet()) {
             List<Object> data = entry.getValue();
@@ -145,9 +187,18 @@ public class ShopDatabaseManager {
             if (((String) data.get(6)).equals(category)) {
                 List<Object> sub_arraylist = new ArrayList<Object>();
 
+                ItemStack item = ItemSerializer.deserialize((String) data.get(2));
+                item.setAmount(1);
+
+                if (materialsList.contains(item.getType())) {
+                    continue;
+                }
+
+                materialsList.add(item.getType());
+
                 sub_arraylist.add(data.get(0));
                 sub_arraylist.add(data.get(1));
-                sub_arraylist.add(ItemSerializer.deserialize((String) data.get(2)));
+                sub_arraylist.add(item);
                 sub_arraylist.add(data.get(3));
                 sub_arraylist.add(data.get(4));
                 sub_arraylist.add(data.get(5));

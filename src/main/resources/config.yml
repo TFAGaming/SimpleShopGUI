@@ -1,13 +1,33 @@
 database:
+  # Supported databases: sqlite
   provider: "sqlite"
-  path: "/database.db"
+
+  # SQLite config
+  path: "database.db"
 
 shop:
   max_items_duration: 604800000 # 1 week
-  show_buy_notifications: true
+  show_buy_notification: true
   time_remaining_format: "%days% days, %hours% hours, %minutes% minutes, %seconds% seconds"
+  max_item_price: 100000000000000000000
 
 gui:
+  __CONFIG_PAGINATION__:
+    PREVIOUS_PAGE:
+      displayname: "&9Previous"
+      lore: null
+      material: "PLAYERHEAD-86971dd881dbaf4fd6bcaa93614493c612f869641ed59d1c9363a3666a5fa6"
+
+    CENTERED_INFO_ITEM:
+      displayname: "&7Page &3%current_page%&7/&c%total_pages%"
+      lore: null
+      material: "PAPER"
+
+    NEXT_PAGE:
+      displayname: "&9Next"
+      lore: null
+      material: "PLAYERHEAD-f32ca66056b72863e98f7f32bd7d94c7a0d796af691c9ac3a9136331352288f9"
+
   shop:
     title: "&9Shop"
     contents:
@@ -58,7 +78,7 @@ gui:
         lore:
           - "&aPlayername: &f%player_name%"
           - "&aBalance: &f$%player_balance%"
-        material: "PLAYERHEAD-adb0e5c6f99e66b74fa84277894b7e4b8f09b2452fb7e486d6ee42b045c26137"
+        material: "PLAYERHEAD-72c170300a3add5dcbe32a21248b704b09b7feec975e4b39ca9358b65af12462" # "PLAYERHEAD-adb0e5c6f99e66b74fa84277894b7e4b8f09b2452fb7e486d6ee42b045c26137"
       HELP:
         displayname: "&7Help?"
         lore:
@@ -67,13 +87,13 @@ gui:
           - "&ato buy, select the item, and then buy it!"
           - ""
           - "&7• &9How to sell an item?"
-          - "&7> &aHold an item that you want to sell and run the"
+          - "&7> &aHold an item that you want to sell and use the"
           - "&afollowing command: &7/sell [price]"
-          - "&aExamples: &7/price 1200&a, &7/price 1.2k"
+          - "&aExamples: &7/sell 1200&a, &7/sell 1.2k"
           - ""
           - "&7• &9How do I get my items back?"
           - "&7> &aUse the following command: &7/listed"
-        material: "PLAYERHEAD-2705fd94a0c431927fb4e639b0fcfb49717e412285a02b439e0112da22b2e2ec"
+        material: "PLAYERHEAD-89a995928090d842d4afdb2296ffe24f2e944272205ceba848ee4046e01f3168" # "PLAYERHEAD-2705fd94a0c431927fb4e639b0fcfb49717e412285a02b439e0112da22b2e2ec"
   shop_category:
     titles:
       BUILDING_BLOCKS: "&9Shop &8> &2Building Blocks"
@@ -83,6 +103,16 @@ gui:
       NATURAL: "&9Shop &8> &aNatural"
       REDSTONE: "&9Shop &8> &cRedstone"
       MISCELLANEOUS: "&9Shop &8> &6Miscellaneous"
+    contents:
+      ITEM:
+        lore:
+          - ""
+          - "&aCurrently &b%items_count% &aitems in the shop!"
+          - ""
+          - "&7Click to Open"
+
+  shop_specific_material:
+    title: "&9Shop &8> &r%item_rarity_color%%item_name%"
     contents:
       ITEM:
         lore:
@@ -132,13 +162,19 @@ messages:
       no_item_in_hand: "&8[&9Shop&8] &cYou are not holding an item to sell!"
       no_price_provided: "&8[&9Shop&8] &cYou must provide the price of the item! &7/sell [price]"
       price_error: "&8[&9Shop&8] &cThe price of the item must be a positive integer and/or end with a valid suffix (k, M, B, T, or Q)."
+      price_over_max: "&8[&9Shop&8] &cToo expensive! The maximum price is %max_price%."
       item_sold: "&8[&9Shop&8] &aThe item &b%item_amount%x %item_name% &ais now listed in the shop!"
+  
   guis:
     buy:
       invalid_item: "&8[&9Shop&8] &cThe item does not exist! The seller has removed the item, or someone else purchased the item."
       item_expired: "&8[&9Shop&8] &cThe item is expired; you cannot buy it."
       inventory_full: "&8[&9Shop&8] &cYour inventory is full! Please leave at least one slot empty."
-      player_is_item_seller: "&8[&9Shop&8] &cYou cannot buy the items that you are currently selling!"
+      player_is_item_seller: "&8[&9Shop&8] &cYou cannot buy the items that you are currently selling! Use &7/listed &cinstead."
       too_expensive: "&8[&9Shop&8] &cYou don't have enough money to buy this item! Your current balance: $%player_balance%"
-  notifications:
+    
+    listed:
+      inventory_full: "&8[&9Shop&8] &cYour inventory is full! Please leave at least one slot empty."
+  
+  notification:
     player_buy: "&8[&9Shop&8] &aYour &b%item_amount%x %item_name% &ahas been purchased by &b%buyer_name% &afor $%item_price%!"
