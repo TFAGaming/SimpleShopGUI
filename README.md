@@ -4,9 +4,10 @@
 
 ## Features
 
-- User-friendly and Open-source
+- Open-source
+- User-friendly
 - Efficient Performance
-- Integration with External Plugins APIs: **Vault**
+- Permissions and Limits for Ranks
 
 ## Requirements
 

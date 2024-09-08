@@ -49,6 +49,7 @@ public class ItemRarityCategorizer {
             Material.MACE,
             Material.DRAGON_EGG,
             Material.ENCHANTED_GOLDEN_APPLE,
+            Material.HEAVY_CORE,
             // These ones below are unobtainable in survival or in vanilla
             Material.COMMAND_BLOCK,
             Material.COMMAND_BLOCK_MINECART,

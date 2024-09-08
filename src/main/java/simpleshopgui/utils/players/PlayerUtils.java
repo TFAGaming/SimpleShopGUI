@@ -21,4 +21,30 @@ public class PlayerUtils {
     public static void removeMoneyToPlayer(OfflinePlayer player, double amount) {
         Plugin.vaultapi.getEconomy().withdrawPlayer(player, amount);
     }
+
+    public static boolean hasPermission(Player player, String command) {
+        return player.hasPermission("simpleshopgui.commands." + command);
+    }
+
+    public static int getMaxListedItemsForPlayer(Player player) {
+        String playerRank = getPlayerRank(player);
+
+        String path = "ranks." + playerRank + ".max_listed_items";
+
+        if (Plugin.config.contains(path)) {
+            return Plugin.config.getInt(path);
+        }
+
+        return -1;
+    }
+
+    private static String getPlayerRank(Player player) {
+        String[] groups = Plugin.vaultapi.getPermissions().getPlayerGroups(player);
+
+        if (groups.length > 0) {
+            return groups[0];
+        }
+
+        return "default";
+    }
 }

@@ -1,4 +1,4 @@
-package simpleshopgui.database;
+package simpleshopgui.utils.shop;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;

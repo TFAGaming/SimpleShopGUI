@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import simpleshopgui.Plugin;
-import simpleshopgui.database.ItemSerializer;
+import simpleshopgui.utils.shop.ItemSerializer;
 import simpleshopgui.utils.shop.ItemTypeCategorizer;
 
 public class ShopDatabaseManager {

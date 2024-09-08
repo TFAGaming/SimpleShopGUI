@@ -1,4 +1,4 @@
-package simpleshopgui.plugins;
+package simpleshopgui.integrations;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;

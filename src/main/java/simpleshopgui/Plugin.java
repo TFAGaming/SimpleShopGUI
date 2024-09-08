@@ -11,7 +11,7 @@ import simpleshopgui.commands.ShopCommand;
 import simpleshopgui.database.Database;
 import simpleshopgui.events.gui.NormalGUIListener;
 import simpleshopgui.events.gui.PaginationGUIListener;
-import simpleshopgui.plugins.Vault;
+import simpleshopgui.integrations.Vault;
 import simpleshopgui.utils.console.Console;
 
 public class Plugin extends JavaPlugin {
@@ -85,7 +85,7 @@ public class Plugin extends JavaPlugin {
 	}
 
 	public static String getVersion() {
-		return "1.0.0-prerelease-2";
+		return "1.0.0";
 	}
 
 	private void disablePlugin() {

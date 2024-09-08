@@ -9,7 +9,17 @@ shop:
   max_items_duration: 604800000 # 1 week
   show_buy_notification: true
   time_remaining_format: "%days% days, %hours% hours, %minutes% minutes, %seconds% seconds"
-  max_item_price: 100000000000000000000
+  max_item_price: 100000000000000000000 # 10000,0Q
+
+ranks:
+  default:
+    max_listed_items: 4
+  vip:
+    max_listed_items: 8
+  moderator:
+    max_listed_items: 12
+  owner:
+    max_listed_items: 100
 
 gui:
   __CONFIG_PAGINATION__:
@@ -37,48 +47,56 @@ gui:
           - ""
           - "&7Click to Open"
         material: GRASS_BLOCK
+
       TOOLS:
         displayname: "&fTools"
         lore:
           - ""
           - "&7Click to Open"
         material: IRON_PICKAXE
+
       FOOD:
         displayname: "&dFood"
         lore:
           - ""
           - "&7Click to Open"
         material: COOKED_BEEF
+        
       MINERALS:
         displayname: "&bMinerals"
         lore:
           - ""
           - "&7Click to Open"
         material: DIAMOND
+
       NATURAL:
         displayname: "&aNatural"
         lore:
           - ""
           - "&7Click to Open"
         material: OAK_SAPLING
+
       REDSTONE:
         displayname: "&cRedstone"
         lore:
           - ""
           - "&7Click to Open"
         material: REDSTONE
+
       MISCELLANEOUS:
         displayname: "&6Miscellaneous"
         lore:
           - ""
           - "&7Click to Open"
         material: LAVA_BUCKET
+
       MY_PROFILE:
         displayname: "&9My Profile"
         lore:
           - "&aPlayername: &f%player_name%"
           - "&aBalance: &f$%player_balance%"
         material: "PLAYERHEAD-72c170300a3add5dcbe32a21248b704b09b7feec975e4b39ca9358b65af12462" # "PLAYERHEAD-adb0e5c6f99e66b74fa84277894b7e4b8f09b2452fb7e486d6ee42b045c26137"
+
       HELP:
         displayname: "&7Help?"
         lore:
@@ -94,6 +112,7 @@ gui:
           - "&7• &9How do I get my items back?"
           - "&7> &aUse the following command: &7/listed"
         material: "PLAYERHEAD-89a995928090d842d4afdb2296ffe24f2e944272205ceba848ee4046e01f3168" # "PLAYERHEAD-2705fd94a0c431927fb4e639b0fcfb49717e412285a02b439e0112da22b2e2ec"
+
   shop_category:
     titles:
       BUILDING_BLOCKS: "&9Shop &8> &2Building Blocks"
@@ -132,6 +151,7 @@ gui:
           - ""
           - "&7Click to Cancel"
         material: RED_STAINED_GLASS_PANE
+
       ITEM:
         __IF_SHULKER_IS_EMPTY__:
           lore:
@@ -139,6 +159,7 @@ gui:
         lore:
           - ""
           - "&7• &aPrice: &f$%item_price%"
+
       BUY:
         displayname: "&aBuy"
         lore:
@@ -163,6 +184,7 @@ messages:
       no_price_provided: "&8[&9Shop&8] &cYou must provide the price of the item! &7/sell [price]"
       price_error: "&8[&9Shop&8] &cThe price of the item must be a positive integer and/or end with a valid suffix (k, M, B, T, or Q)."
       price_over_max: "&8[&9Shop&8] &cToo expensive! The maximum price is %max_price%."
+      max_listed_items_reached: "&8[&9Shop&8] &cYou cannot sell more items! Upgrade to Premium to unlock more features."
       item_sold: "&8[&9Shop&8] &aThe item &b%item_amount%x %item_name% &ais now listed in the shop!"
   
   guis:
@@ -178,3 +200,5 @@ messages:
   
   notification:
     player_buy: "&8[&9Shop&8] &aYour &b%item_amount%x %item_name% &ahas been purchased by &b%buyer_name% &afor $%item_price%!"
+
+  permission_error: "&cYou do not have the permission to run this command!"

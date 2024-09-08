@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 import simpleshopgui.Plugin;
 import simpleshopgui.managers.ShopDatabaseManager;
 import simpleshopgui.utils.colors.ChatColorTranslator;
+import simpleshopgui.utils.players.PlayerUtils;
 import simpleshopgui.utils.shop.ShopUtils;
 
 public class SellCommand implements TabExecutor {
@@ -21,6 +22,12 @@ public class SellCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
+
+            if (!PlayerUtils.hasPermission(player, "sell")) {
+               player.sendMessage(ChatColorTranslator
+                        .translate(Plugin.config.getString("messages.permission_error")));
+                return true; 
+            }
 
             ItemStack itemInHand = player.getInventory().getItemInMainHand();
 
@@ -55,6 +62,14 @@ public class SellCommand implements TabExecutor {
                         .translate(Plugin.config.getString("messages.commands.sell.price_over_max").replace(
                                 "%max_price%",
                                 ShopUtils.parseFromDoubleToString(Plugin.config.getDouble("shop.max_item_price")))));
+                return true;
+            }
+
+            int totalSellingItems = ShopDatabaseManager.getListedItemsByPlayer(player).size();
+
+            if (totalSellingItems >= PlayerUtils.getMaxListedItemsForPlayer(player)) {
+                player.sendMessage(ChatColorTranslator
+                        .translate(Plugin.config.getString("messages.commands.sell.max_listed_items_reached")));
                 return true;
             }
 

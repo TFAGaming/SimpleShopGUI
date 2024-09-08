@@ -46,7 +46,7 @@ public class ItemTypeCategorizer {
                 material.equals(Material.WARPED_FUNGUS_ON_A_STICK) || material.equals(Material.WIND_CHARGE) ||
                 material.equals(Material.COMPASS) || material.equals(Material.RECOVERY_COMPASS) ||
                 material.equals(Material.ELYTRA) || material.equals(Material.FLINT_AND_STEEL) ||
-                material.equals(Material.LEAD);
+                material.equals(Material.LEAD) || material.equals(Material.WOLF_ARMOR);
     }
 
     private static boolean isOre(Material material) {
@@ -146,7 +146,8 @@ public class ItemTypeCategorizer {
                 material.name().contains("SPROUT") ||
                 material.name().contains("HANGING_ROOTS") ||
                 material.name().contains("MOSS") ||
-                material.name().contains("LEAVES") ||
+                material.name().contains("CORAL") ||
+                material.name().contains("FAN") ||
                 material.name().contains("LILY") || material.name().endsWith("_SEEDS")) {
             return true;
         }
