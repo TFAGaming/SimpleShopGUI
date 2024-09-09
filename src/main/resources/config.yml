@@ -95,9 +95,10 @@ gui:
         lore:
           - "&aPlayername: &f%player_name%"
           - "&aBalance: &f$%player_balance%"
-        material: "PLAYERHEAD-72c170300a3add5dcbe32a21248b704b09b7feec975e4b39ca9358b65af12462" # "PLAYERHEAD-adb0e5c6f99e66b74fa84277894b7e4b8f09b2452fb7e486d6ee42b045c26137"
+        material: "PLAYERHEAD-72c170300a3add5dcbe32a21248b704b09b7feec975e4b39ca9358b65af12462"
 
       HELP:
+        enabled: false
         displayname: "&7Help?"
         lore:
           - "&7• &9How to buy an item?"
@@ -111,7 +112,7 @@ gui:
           - ""
           - "&7• &9How do I get my items back?"
           - "&7> &aUse the following command: &7/listed"
-        material: "PLAYERHEAD-89a995928090d842d4afdb2296ffe24f2e944272205ceba848ee4046e01f3168" # "PLAYERHEAD-2705fd94a0c431927fb4e639b0fcfb49717e412285a02b439e0112da22b2e2ec"
+        material: "PLAYERHEAD-89a995928090d842d4afdb2296ffe24f2e944272205ceba848ee4046e01f3168"
 
   shop_category:
     titles:

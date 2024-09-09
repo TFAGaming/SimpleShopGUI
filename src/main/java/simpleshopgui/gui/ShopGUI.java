@@ -63,8 +63,10 @@ public class ShopGUI {
 								ShopUtils.parseFromDoubleToString(PlayerUtils
 										.getPlayerBalance(player))))));
 
-		inventory.setItem(35, ItemGUI.getItem(getConfigString("HELP.displayname"),
+		if (Plugin.config.getBoolean("gui.shop.contents.HELP.enabled")) {
+			inventory.setItem(35, ItemGUI.getItem(getConfigString("HELP.displayname"),
 				getConfigStringList("HELP.lore"), getConfigString("HELP.material"), null));
+		}
 	}
 
 	public void openInventory() {
