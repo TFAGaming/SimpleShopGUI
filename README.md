@@ -1,8 +1,10 @@
 # SimpleShopGUI
 
-**SimpleShopGUI** is a simple and user-friendly Minecraft shop plugin based on GUIs. Players can browse through a wide range of items, each organized into specific categories and types, making it easier to find exactly what they're looking for.
+**SimpleShopGUI** is a simple and user-friendly Minecraft shop plugin based on GUIs. Players can browse a wide range of items, each organized into specific categories and types, making finding exactly what they're looking for easier.
 
 The current database is **SQLite**, other providers are still unsupported.
+
+YouTube video: https://www.youtube.com/watch?v=2oxVJxw8HZE
 
 ## Features
 
@@ -30,7 +32,7 @@ Expired items are not gone forever, they will stay as an item in the shop, but n
 
 ## Commands
 
-- `/shop`: Opens a GUI with all available categories in the shop.
+- `/shop (category)`: Opens a GUI with all available categories in the shop.
 - `/listed`: View all items that you are currently selling and the expired ones.
 - `/sell [price]`: Sell an item that you are currently holding with your hand.
 

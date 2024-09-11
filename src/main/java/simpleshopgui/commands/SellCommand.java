@@ -37,6 +37,12 @@ public class SellCommand implements TabExecutor {
                 return true;
             }
 
+            if (Plugin.config.getStringList("banned_items").contains(itemInHand.getType().name())) {
+                player.sendMessage(ChatColorTranslator
+                        .translate(Plugin.config.getString("messages.commands.sell.item_is_banned")));
+                return true;
+            }
+
             if (args.length == 0) {
                 player.sendMessage(ChatColorTranslator
                         .translate(Plugin.config.getString("messages.commands.sell.no_price_provided")));
@@ -100,7 +106,7 @@ public class SellCommand implements TabExecutor {
                     return Lists.newArrayList();
                 }
 
-                return Lists.newArrayList(ShopUtils.parseFromDoubleToString(parsed).replace(",", "."));
+                return Lists.newArrayList(ShopUtils.parseFromDoubleToString(parsed));
             }
 
             return Lists.newArrayList();

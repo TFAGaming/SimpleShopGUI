@@ -7,10 +7,17 @@ database:
 
 shop:
   max_items_duration: 604800000 # 1 week
-  show_buy_notification: true
+  show_buy_notification: true # Show notification to sellers when there is a player bought one of their items (true = Enable, false = Disable)
   time_remaining_format: "%days% days, %hours% hours, %minutes% minutes, %seconds% seconds"
   max_item_price: 100000000000000000000 # 10000,0Q
 
+# The items that are not allowed to be listed in shop
+banned_items:
+  - BEDROCK
+  - COMMAND_BLOCK
+
+# Set each rank with a custom limit
+# • max_listed_items (integer): The maximum items that the player can list in the shop
 ranks:
   default:
     max_listed_items: 4
@@ -21,6 +28,7 @@ ranks:
   owner:
     max_listed_items: 100
 
+# GUIs configuration
 gui:
   __CONFIG_PAGINATION__:
     PREVIOUS_PAGE:
@@ -178,15 +186,20 @@ gui:
           - ""
           - "&7Click to Remove"
 
+# Messages configuration
 messages:
   commands:
     sell:
       no_item_in_hand: "&8[&9Shop&8] &cYou are not holding an item to sell!"
+      item_is_banned: "&8[&9Shop&8] &cThis item is not allowed to be on shop!"
       no_price_provided: "&8[&9Shop&8] &cYou must provide the price of the item! &7/sell [price]"
       price_error: "&8[&9Shop&8] &cThe price of the item must be a positive integer and/or end with a valid suffix (k, M, B, T, or Q)."
       price_over_max: "&8[&9Shop&8] &cToo expensive! The maximum price is %max_price%."
       max_listed_items_reached: "&8[&9Shop&8] &cYou cannot sell more items! Upgrade to Premium to unlock more features."
       item_sold: "&8[&9Shop&8] &aThe item &b%item_amount%x %item_name% &ais now listed in the shop!"
+
+    shop:
+      invalid_category: "&8[&9Shop&8] &cInvalid category!"
   
   guis:
     buy:

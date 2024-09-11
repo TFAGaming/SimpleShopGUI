@@ -53,17 +53,17 @@ public class PaginationGUIListener implements Listener {
 
                             gui.openInventory();
 
-                            ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+                            ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
                         } else {
                             pagegui.previousPage();
                         }
                     } else if (event.getSlot() == last_index_last_line) {
                         pagegui.nextPage();
                     } else {
-                        if (ShopUtils.playerTriggerBuy.containsKey(player.getUniqueId()) && !ShopUtils.playerTriggerBuy.get(player.getUniqueId())) {
-                            ShopUtils.playerTriggerBuy.put(player.getUniqueId(), true);
+                        if (ShopUtils.playerTriggerEvent.containsKey(player.getUniqueId()) && !ShopUtils.playerTriggerEvent.get(player.getUniqueId())) {
+                            ShopUtils.playerTriggerEvent.put(player.getUniqueId(), true);
                         } else {
-                            ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+                            ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
 
                             SpecificItemsGUIListener.listen(event, player, pagegui,
                                     ShopGUI.playerCurrentCategory.get(player.getUniqueId()));
@@ -90,7 +90,7 @@ public class PaginationGUIListener implements Listener {
                     if (event.getSlot() == first_index_last_line_3) {
                         if (pagegui_3.getPage() == 0) {
                             if (ShopGUI.playerCurrentCategory.containsKey(player.getUniqueId())) {
-                                ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+                                ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
                                 ShopGUI.playerCurrentMaterial.remove(player.getUniqueId());
 
                                 switch (ShopGUI.playerCurrentCategory.get(player.getUniqueId())) {
@@ -119,7 +119,7 @@ public class PaginationGUIListener implements Listener {
                                         break;
                                 }
                             } else {
-                                ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+                                ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
                                 ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
                                 ShopGUI.playerCurrentMaterial.remove(player.getUniqueId());
 
@@ -128,7 +128,7 @@ public class PaginationGUIListener implements Listener {
                                 gui.openInventory();
                             }
 
-                            // ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+                            // ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
                         } else {
                             pagegui_3.previousPage();
                         }
@@ -183,7 +183,7 @@ public class PaginationGUIListener implements Listener {
 
             //ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
 
-            //ShopUtils.playerTriggerBuy.remove(player.getUniqueId());
+            //ShopUtils.playerTriggerEvent.remove(player.getUniqueId());
         }
     }
 }

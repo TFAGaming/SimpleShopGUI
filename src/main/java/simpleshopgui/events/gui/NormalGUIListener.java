@@ -65,7 +65,7 @@ public class NormalGUIListener implements Listener {
                     break;
             }
 
-            ShopUtils.playerTriggerBuy.put(player.getUniqueId(), false);
+            ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
         } else if (ShopUtils.getCurrentInventoryId(player) == 4) {
             event.setCancelled(true);
 
@@ -238,7 +238,7 @@ public class NormalGUIListener implements Listener {
         Player player = (Player) event.getPlayer();
 
         ShopUtils.removeCurrentInventoryId(player);
-        ShopUtils.playerTriggerBuy.remove(player.getUniqueId());
+        ShopUtils.playerTriggerEvent.remove(player.getUniqueId());
     }
 
     private void deletePlayerData(Player player) {

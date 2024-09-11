@@ -16,7 +16,7 @@ import com.google.common.collect.Lists;
 import simpleshopgui.Plugin;
 
 public class ShopUtils {
-    public static Map<UUID, Boolean> playerTriggerBuy = new HashMap<UUID, Boolean>();
+    public static Map<UUID, Boolean> playerTriggerEvent = new HashMap<UUID, Boolean>();
     public static Map<UUID, Integer> inventoryCache = new HashMap<UUID, Integer>();
 
     public static void setCurrentInventoryId(Player player, int id) {
@@ -43,9 +43,11 @@ public class ShopUtils {
 
     public static String userFriendlyItemName(String input) {
         String output = "";
+
         for (String s : input.split("_")) {
             output += s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase() + " ";
         }
+
         return output.substring(0, output.length() - 1);
     }
 
@@ -128,9 +130,6 @@ public class ShopUtils {
         timeDifference %= (1000 * 60);
 
         long seconds = (long) (timeDifference / 1000);
-
-        // return String.format("%d days, %d hours, %d minutes, %d seconds", days,
-        // hours, minutes, seconds);
 
         return Plugin.config.getString("shop.time_remaining_format")
                 .replace("%seconds%", "" + seconds).replace("%minutes%", "" + minutes)
