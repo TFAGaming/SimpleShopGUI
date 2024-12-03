@@ -3,13 +3,15 @@ package simpleshopgui.events.gui;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
 import simpleshopgui.events.gui.paginations.BuyItemGUIListener;
 import simpleshopgui.events.gui.paginations.ListedItemsGUIListener;
-import simpleshopgui.events.gui.paginations.SpecificItemsGUIListener;
+import simpleshopgui.events.gui.paginations.SpecificMaterialGUIListener;
 import simpleshopgui.gui.ShopGUI;
 import simpleshopgui.gui.ShopGUIBuildingBlocks;
 import simpleshopgui.gui.ShopGUIFood;
@@ -18,17 +20,28 @@ import simpleshopgui.gui.ShopGUIMiscellaneous;
 import simpleshopgui.gui.ShopGUINatural;
 import simpleshopgui.gui.ShopGUIRedstone;
 import simpleshopgui.gui.ShopGUITools;
+import simpleshopgui.managers.PlayerGUIManager;
+import simpleshopgui.utils.gui.GUIIdentity;
 import simpleshopgui.utils.gui.PaginationGUI;
-import simpleshopgui.utils.shop.ShopUtils;
+import simpleshopgui.utils.shop.Category;
 
 public class PaginationGUIListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
+        if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (event.getClickedInventory() != null && event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
+            return;
+        }
+
         if (PaginationGUI.playerInventory.containsKey(player.getUniqueId())) {
-            switch (ShopUtils.getCurrentInventoryId(player)) {
-                case 2:
+            switch (PlayerGUIManager.getCurrentInventory(player)) {
+                case GUIIdentity.CATEGORY_GUI:
                     event.setCancelled(true);
 
                     Inventory inventory = PaginationGUI.playerInventory.get(player.getUniqueId());
@@ -38,7 +51,7 @@ public class PaginationGUIListener implements Listener {
                     int first_index_last_line = last_index_last_line - 8;
                     int centered_index_last_line = last_index_last_line - 4;
 
-                    PaginationGUI pagegui = PaginationGUI.instance.get(player.getUniqueId());
+                    PaginationGUI pagegui = PaginationGUI.playerPaginationInstance.get(player.getUniqueId());
 
                     if (event.getSlot() == centered_index_last_line) {
                         return;
@@ -46,32 +59,32 @@ public class PaginationGUIListener implements Listener {
 
                     if (event.getSlot() == first_index_last_line) {
                         if (pagegui.getPage() == 0) {
-                            ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
-                            ShopGUI.playerCurrentMaterial.remove(player.getUniqueId());
+                            ShopGUI.playerSelectedCategory.remove(player.getUniqueId());
+                            ShopGUI.playerSelectedMaterial.remove(player.getUniqueId());
 
                             ShopGUI gui = new ShopGUI(player);
 
                             gui.openInventory();
 
-                            ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
+                            PlayerGUIManager.playerTriggerEvent.put(player.getUniqueId(), false);
                         } else {
                             pagegui.previousPage();
                         }
                     } else if (event.getSlot() == last_index_last_line) {
                         pagegui.nextPage();
                     } else {
-                        if (ShopUtils.playerTriggerEvent.containsKey(player.getUniqueId()) && !ShopUtils.playerTriggerEvent.get(player.getUniqueId())) {
-                            ShopUtils.playerTriggerEvent.put(player.getUniqueId(), true);
+                        if (PlayerGUIManager.playerTriggerEvent.containsKey(player.getUniqueId()) && !PlayerGUIManager.playerTriggerEvent.get(player.getUniqueId())) {
+                            PlayerGUIManager.playerTriggerEvent.put(player.getUniqueId(), true);
                         } else {
-                            ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
+                            PlayerGUIManager.playerTriggerEvent.put(player.getUniqueId(), false);
 
-                            SpecificItemsGUIListener.listen(event, player, pagegui,
-                                    ShopGUI.playerCurrentCategory.get(player.getUniqueId()));
+                            SpecificMaterialGUIListener.listen(event, player, pagegui,
+                                    ShopGUI.playerSelectedCategory.get(player.getUniqueId()));
                         }
 
                     }
                     break;
-                case 3:
+                case GUIIdentity.SPECIFIC_MATERIAL_GUI:
                     event.setCancelled(true);
 
                     Inventory inventory_3 = PaginationGUI.playerInventory.get(player.getUniqueId());
@@ -81,7 +94,7 @@ public class PaginationGUIListener implements Listener {
                     int first_index_last_line_3 = last_index_last_line_3 - 8;
                     int centered_index_last_line_3 = last_index_last_line_3 - 4;
 
-                    PaginationGUI pagegui_3 = PaginationGUI.instance.get(player.getUniqueId());
+                    PaginationGUI pagegui_3 = PaginationGUI.playerPaginationInstance.get(player.getUniqueId());
 
                     if (event.getSlot() == centered_index_last_line_3) {
                         return;
@@ -89,39 +102,41 @@ public class PaginationGUIListener implements Listener {
 
                     if (event.getSlot() == first_index_last_line_3) {
                         if (pagegui_3.getPage() == 0) {
-                            if (ShopGUI.playerCurrentCategory.containsKey(player.getUniqueId())) {
-                                ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
-                                ShopGUI.playerCurrentMaterial.remove(player.getUniqueId());
+                            if (ShopGUI.playerSelectedCategory.containsKey(player.getUniqueId())) {
+                                PlayerGUIManager.playerTriggerEvent.put(player.getUniqueId(), false);
 
-                                switch (ShopGUI.playerCurrentCategory.get(player.getUniqueId())) {
-                                    case "Building Blocks":
+                                ShopGUI.playerSelectedMaterial.remove(player.getUniqueId());
+
+                                switch (ShopGUI.playerSelectedCategory.get(player.getUniqueId())) {
+                                    case Category.BUILDING_BLOCKS:
                                         ShopGUIBuildingBlocks.create(player);
                                         break;
-                                    case "Tools":
+                                    case Category.TOOLS:
                                         ShopGUITools.create(player);
                                         break;
-                                    case "Food":
+                                    case Category.FOOD:
                                         ShopGUIFood.create(player);
                                         break;
-                                    case "Ore":
+                                    case Category.MINERALS:
                                         ShopGUIMinerals.create(player);
                                         break;
-                                    case "Natural":
+                                    case Category.NATURAL:
                                         ShopGUINatural.create(player);
                                         break;
-                                    case "Redstone":
+                                    case Category.REDSTONE:
                                         ShopGUIRedstone.create(player);
                                         break;
-                                    case "Miscellaneous":
+                                    case Category.MISCELLANEOUS:
                                         ShopGUIMiscellaneous.create(player);
                                         break;
                                     default:
                                         break;
                                 }
                             } else {
-                                ShopUtils.playerTriggerEvent.put(player.getUniqueId(), false);
-                                ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
-                                ShopGUI.playerCurrentMaterial.remove(player.getUniqueId());
+                                PlayerGUIManager.playerTriggerEvent.put(player.getUniqueId(), false);
+
+                                ShopGUI.playerSelectedCategory.remove(player.getUniqueId());
+                                ShopGUI.playerSelectedMaterial.remove(player.getUniqueId());
 
                                 ShopGUI gui = new ShopGUI(player);
 
@@ -136,10 +151,10 @@ public class PaginationGUIListener implements Listener {
                         pagegui_3.nextPage();
                     } else {
                         BuyItemGUIListener.listen(event, player, pagegui_3,
-                                ShopGUI.playerCurrentMaterial.get(player.getUniqueId()));
+                                ShopGUI.playerSelectedMaterial.get(player.getUniqueId()));
                     }
                     break;
-                case 5:
+                case GUIIdentity.LISTED_ITEMS_GUI:
                     event.setCancelled(true);
 
                     Inventory inventory_5 = PaginationGUI.playerInventory.get(player.getUniqueId());
@@ -149,7 +164,7 @@ public class PaginationGUIListener implements Listener {
                     int first_index_last_line_5 = last_index_last_line_5 - 8;
                     int centered_index_last_line_5 = last_index_last_line_5 - 4;
 
-                    PaginationGUI pagegui_5 = PaginationGUI.instance.get(player.getUniqueId());
+                    PaginationGUI pagegui_5 = PaginationGUI.playerPaginationInstance.get(player.getUniqueId());
 
                     if (event.getSlot() == centered_index_last_line_5) {
                         return;
@@ -179,7 +194,7 @@ public class PaginationGUIListener implements Listener {
 
         if (PaginationGUI.playerInventory.containsKey(player.getUniqueId())) {
             PaginationGUI.playerInventory.remove(player.getUniqueId());
-            PaginationGUI.instance.remove(player.getUniqueId());
+            PaginationGUI.playerPaginationInstance.remove(player.getUniqueId());
 
             //ShopGUI.playerCurrentCategory.remove(player.getUniqueId());
 

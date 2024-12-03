@@ -1,4 +1,4 @@
-package simpleshopgui.utils.players;
+package simpleshopgui.utils.player;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class PlayerUtils {
         Plugin.vaultapi.getEconomy().depositPlayer(player, amount);
     }
 
-    public static void removeMoneyToPlayer(OfflinePlayer player, double amount) {
+    public static void removeMoneyFromPlayer(OfflinePlayer player, double amount) {
         Plugin.vaultapi.getEconomy().withdrawPlayer(player, amount);
     }
 

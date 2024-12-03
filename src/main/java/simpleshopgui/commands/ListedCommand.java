@@ -11,8 +11,9 @@ import com.google.common.collect.Lists;
 
 import simpleshopgui.Plugin;
 import simpleshopgui.gui.ListedItemsGUI;
-import simpleshopgui.utils.colors.ChatColorTranslator;
-import simpleshopgui.utils.players.PlayerUtils;
+import simpleshopgui.managers.ShopDatabaseManager;
+import simpleshopgui.utils.chat.ChatColorTranslator;
+import simpleshopgui.utils.player.PlayerUtils;
 
 public class ListedCommand implements TabExecutor {
     @Override
@@ -23,6 +24,14 @@ public class ListedCommand implements TabExecutor {
             if (!PlayerUtils.hasPermission(player, "listed")) {
                player.sendMessage(ChatColorTranslator
                         .translate(Plugin.config.getString("messages.permission_error")));
+                return true; 
+            }
+
+            List<List<Object>> listedItems = ShopDatabaseManager.getListedItemsByPlayer(player);
+
+            if (listedItems.size() == 0) {
+                player.sendMessage(ChatColorTranslator
+                        .translate(Plugin.config.getString("messages.commands.listed.no_items_listed")));
                 return true; 
             }
 

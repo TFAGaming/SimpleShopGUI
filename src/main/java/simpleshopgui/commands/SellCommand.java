@@ -13,8 +13,8 @@ import com.google.common.collect.Lists;
 
 import simpleshopgui.Plugin;
 import simpleshopgui.managers.ShopDatabaseManager;
-import simpleshopgui.utils.colors.ChatColorTranslator;
-import simpleshopgui.utils.players.PlayerUtils;
+import simpleshopgui.utils.chat.ChatColorTranslator;
+import simpleshopgui.utils.player.PlayerUtils;
 import simpleshopgui.utils.shop.ShopUtils;
 
 public class SellCommand implements TabExecutor {

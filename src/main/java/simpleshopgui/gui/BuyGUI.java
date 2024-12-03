@@ -11,7 +11,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import simpleshopgui.Plugin;
-import simpleshopgui.utils.colors.ChatColorTranslator;
+import simpleshopgui.managers.PlayerGUIManager;
+import simpleshopgui.utils.chat.ChatColorTranslator;
+import simpleshopgui.utils.gui.GUIIdentity;
 import simpleshopgui.utils.gui.ItemGUI;
 import simpleshopgui.utils.shop.ShopUtils;
 
@@ -83,7 +85,7 @@ public class BuyGUI {
     public void openInventory() {
         player.openInventory(inventory);
 
-        ShopUtils.setCurrentInventoryId(player, 4);
+        PlayerGUIManager.setCurrentInventoryId(player, GUIIdentity.BUY_GUI);
     }
 
     private String getConfigString(String path) {

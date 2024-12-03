@@ -1,6 +1,7 @@
 package simpleshopgui.commands;
 
 import java.util.List;
+import java.util.Locale.Category;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -18,14 +19,11 @@ import simpleshopgui.gui.ShopGUIMiscellaneous;
 import simpleshopgui.gui.ShopGUINatural;
 import simpleshopgui.gui.ShopGUIRedstone;
 import simpleshopgui.gui.ShopGUITools;
-import simpleshopgui.utils.colors.ChatColorTranslator;
-import simpleshopgui.utils.players.PlayerUtils;
-import simpleshopgui.utils.shop.ShopUtils;
+import simpleshopgui.managers.PlayerGUIManager;
+import simpleshopgui.utils.chat.ChatColorTranslator;
+import simpleshopgui.utils.player.PlayerUtils;
 
 public class ShopCommand implements TabExecutor {
-    private List<String> availableCategories = Lists.newArrayList("Blocks", "Tools", "Food", "Minerals", "Natural",
-            "Redstone", "Miscellaneous");
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
@@ -38,39 +36,39 @@ public class ShopCommand implements TabExecutor {
             }
 
             if (args.length == 1) {
-                if (!availableCategories.contains(args[0])) {
+                if (!simpleshopgui.utils.shop.Category.getAllCategories(true).contains(args[0].toLowerCase())) {
                     player.sendMessage(ChatColorTranslator
                             .translate(Plugin.config.getString("messages.commands.shop.invalid_category")));
                     return true;
                 }
 
-                switch (args[0]) {
-                    case "Blocks":
+                switch (args[0].toLowerCase()) {
+                    case "blocks":
                         ShopGUIBuildingBlocks.create(player);
                         break;
-                    case "Tools":
+                    case "tools":
                         ShopGUITools.create(player);
                         break;
-                    case "Food":
+                    case "food":
                         ShopGUIFood.create(player);
                         break;
-                    case "Minerals":
+                    case "minerals":
                         ShopGUIMinerals.create(player);
                         break;
-                    case "Natural":
+                    case "natural":
                         ShopGUINatural.create(player);
                         break;
-                    case "Redstone":
+                    case "redstone":
                         ShopGUIRedstone.create(player);
                         break;
-                    case "Miscellaneous":
+                    case "miscellaneous":
                         ShopGUIMiscellaneous.create(player);
                         break;
                     default:
                         break;
                 }
 
-                ShopUtils.playerTriggerEvent.put(player.getUniqueId(), true);
+                PlayerGUIManager.playerTriggerEvent.put(player.getUniqueId(), true);
             } else {
                 ShopGUI gui = new ShopGUI(player);
 
@@ -85,20 +83,22 @@ public class ShopCommand implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        List<String> categories = simpleshopgui.utils.shop.Category.getAllCategories(false);
+
         if (args.length == 1) {
             if (args[0].length() <= 0) {
-                return availableCategories;
+                return categories;
             }
 
-            List<String> finalList = Lists.newArrayList();
+            List<String> returnList = Lists.newArrayList();
 
-            for (String category : availableCategories) {
+            for (String category : categories) {
                 if (category.toLowerCase().startsWith(args[0].toLowerCase())) {
-                    finalList.add(category);
+                    returnList.add(category);
                 }
             }
 
-            return finalList;
+            return returnList;
         }
 
         return Lists.newArrayList();

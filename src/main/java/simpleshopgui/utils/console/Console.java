@@ -3,7 +3,6 @@ package simpleshopgui.utils.console;
 import java.util.logging.Logger;
 
 import simpleshopgui.Plugin;
-import simpleshopgui.utils.colors.ConsoleColors;
 
 public class Console {
     private static final Logger logger = Logger.getLogger("SimpleShopGUI");
@@ -16,12 +15,12 @@ public class Console {
         }
 
         String banner = "  ____  _                 _      ____  _                  ____ _   _ ___ \r\n" +
-                        " / ___|(_)_ __ ___  _ __ | | ___/ ___|| |__   ___  _ __  / ___| | | |_ _|\r\n" +
-                        " \\___ \\| | '_ ` _ \\| '_ \\| |/ _ \\___ \\| '_ \\ / _ \\| '_ \\| |  _| | | || | \r\n" +
-                        "  ___) | | | | | | | |_) | |  __/___) | | | | (_) | |_) | |_| | |_| || | \r\n" +
-                        " |____/|_|_| |_| |_| .__/|_|\\___|____/|_| |_|\\___/| .__/ \\____|\\___/|___|\r\n" +
-                        "                   |_|                            |_|                    " +
-                        "\nVersion: v" + Plugin.getVersion();
+                " / ___|(_)_ __ ___  _ __ | | ___/ ___|| |__   ___  _ __  / ___| | | |_ _|\r\n" +
+                " \\___ \\| | '_ ` _ \\| '_ \\| |/ _ \\___ \\| '_ \\ / _ \\| '_ \\| |  _| | | || | \r\n" +
+                "  ___) | | | | | | | |_) | |  __/___) | | | | (_) | |_) | |_| | |_| || | \r\n" +
+                " |____/|_|_| |_| |_| .__/|_|\\___|____/|_| |_|\\___/| .__/ \\____|\\___/|___|\r\n" +
+                "                   |_|                            |_|                    " +
+                "\nVersion: " + Plugin.getVersion();
 
         logger.info(line_splitter);
 

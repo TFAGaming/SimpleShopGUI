@@ -1,4 +1,4 @@
-package simpleshopgui.utils.colors;
+package simpleshopgui.utils.chat;
 
 import org.bukkit.ChatColor;
 

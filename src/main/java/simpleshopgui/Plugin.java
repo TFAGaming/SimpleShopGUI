@@ -9,7 +9,7 @@ import simpleshopgui.commands.ListedCommand;
 import simpleshopgui.commands.SellCommand;
 import simpleshopgui.commands.ShopCommand;
 import simpleshopgui.database.Database;
-import simpleshopgui.events.gui.NormalGUIListener;
+import simpleshopgui.events.gui.GUIListener;
 import simpleshopgui.events.gui.PaginationGUIListener;
 import simpleshopgui.integrations.Vault;
 import simpleshopgui.utils.console.Console;
@@ -47,29 +47,24 @@ public class Plugin extends JavaPlugin {
 			getDataFolder().mkdirs();
 		}
 
-		config = Plugin.getPlugin(Plugin.class).getConfig();
+		config = getConfig();
 
 		String provider = config.getString("database.provider");
-		String jdbcUrl = "";
 
-		if (provider.equalsIgnoreCase("sqlite")) {
-			jdbcUrl = getDataFolder().getAbsolutePath() + "/" + config.getString("database.path");
-		}
-
-		database = new Database(config.getString("database.provider"), jdbcUrl);
+		database = new Database(config.getString("database.provider"), this);
 
 		try {
 			database.getConnection();
 			database.prepareTables();
 
-			Console.info("Successfully connected to the database.");
+			Console.info("Successfully connected to the database (provider: " + provider + ").");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Console.error("Failed to connect to the database, disabling...");
+			Console.error("Failed to connect to the database (provider: " + provider + "), disabling...");
 			disablePlugin();
 		}
 
-		getServer().getPluginManager().registerEvents(new NormalGUIListener(), this);
+		getServer().getPluginManager().registerEvents(new GUIListener(), this);
 		getServer().getPluginManager().registerEvents(new PaginationGUIListener(), this);
 
 		getCommand("shop").setExecutor(new ShopCommand());
@@ -85,10 +80,16 @@ public class Plugin extends JavaPlugin {
 	}
 
 	public static String getVersion() {
-		return "1.1.0";
+		return "1.2.0";
 	}
 
-	private void disablePlugin() {
+	public void disablePlugin() {
+		try {
+			database.closeConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		getServer().getPluginManager().disablePlugin(this);
 	}
 }

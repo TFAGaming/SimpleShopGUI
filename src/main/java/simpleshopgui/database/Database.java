@@ -5,37 +5,58 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import simpleshopgui.Plugin;
 import simpleshopgui.managers.ShopDatabaseManager;
 
 public class Database {
     public Connection connection = null;
     private final String provider;
-    private final String jdbcUrl;
+    private final Plugin plugin;
 
-    public Database(String provider, String jdbcUrl) {
+    public Database(String provider, Plugin plugin) {
         this.provider = provider;
-        this.jdbcUrl = jdbcUrl;
+        this.plugin = plugin;
     }
 
     public Connection getConnection() throws SQLException {
         if (this.connection == null) {
             if (provider.equalsIgnoreCase("sqlite")) {
-                Connection connection = DriverManager.getConnection("jdbc:sqlite:" + jdbcUrl);
+                String sqlitePath = "";
+
+                if (provider.equalsIgnoreCase("sqlite")) {
+                    sqlitePath = this.plugin.getDataFolder().getAbsolutePath() + "/"
+                            + this.plugin.getConfig().getString("database.sqlite.path");
+                }
+
+                String url = "jdbc:sqlite:" + sqlitePath;
+
+                Connection connection = DriverManager.getConnection(url);
                 this.connection = connection;
-            } /*
-               * else if (provider.equalsIgnoreCase("postgresql")) {
-               * String host = Plugin.config.getString("database.host");
-               * int port = Plugin.config.getInt("database.port");
-               * String database = Plugin.config.getString("database.name");
-               * String username = Plugin.config.getString("database.username");
-               * String password = Plugin.config.getString("database.password");
-               * 
-               * Connection connection = DriverManager.getConnection("jdbc:postgresql://" +
-               * host + ":" + port + "/" + database, username, password);
-               * this.connection = connection;
-               * }
-               */ else {
-                throw new SQLException("Invalid provider \"" + provider + "\"");
+            } else if (provider.equalsIgnoreCase("postgresql")) {
+                String host = Plugin.config.getString("database.postgresql.host");
+                int port = Plugin.config.getInt("database.postgresql.port");
+                String database = Plugin.config.getString("database.postgresql.database");
+                String username = Plugin.config.getString("database.postgresql.username");
+                String password = Plugin.config.getString("database.postgresql.password");
+
+                String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
+
+                Connection connection = DriverManager.getConnection(url, username, password);
+                this.connection = connection;
+            } else if (provider.equalsIgnoreCase("mysql")) {
+                String host = Plugin.config.getString("database.mysql.host");
+                int port = Plugin.config.getInt("database.mysql.port");
+                String database = Plugin.config.getString("database.mysql.database");
+                String username = Plugin.config.getString("database.mysql.username");
+                String password = Plugin.config.getString("database.mysql.password");
+
+                String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
+
+                Connection connection = DriverManager.getConnection(url, username, password);
+                this.connection = connection;
+            } else {
+                throw new SQLException(
+                        "Invalid provider \"" + provider + "\", valid providers: sqlite, postgresql, mysql");
             }
         }
 
@@ -50,15 +71,37 @@ public class Database {
     }
 
     public void prepareTables() throws SQLException {
-        executeStatement("CREATE TABLE IF NOT EXISTS sold_items (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "player_uuid VARCHAR(36) NOT NULL," +
-                "item_data TEXT NOT NULL," +
-                "price BIGINT NOT NULL," +
-                "created_at BIGINT NOT NULL," +
-                "expires BIGINT NOT NULL," +
-                "category TEXT NOT NULL" +
-                ");");
+        if (provider.equalsIgnoreCase("sqlite")) {
+            executeStatement("CREATE TABLE IF NOT EXISTS shop_items (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "player_uuid VARCHAR(36) NOT NULL," +
+                    "item_data TEXT NOT NULL," +
+                    "price BIGINT NOT NULL," +
+                    "created_at BIGINT NOT NULL," +
+                    "expires_at BIGINT NOT NULL," +
+                    "category INTEGER NOT NULL" +
+                    ");");
+        } else if (provider.equalsIgnoreCase("postgresql")) {
+            executeStatement("CREATE TABLE IF NOT EXISTS shop_items (" +
+                    "id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY," +
+                    "player_uuid VARCHAR(36) NOT NULL," +
+                    "item_data TEXT NOT NULL," +
+                    "price BIGINT NOT NULL," +
+                    "created_at BIGINT NOT NULL," +
+                    "expires_at BIGINT NOT NULL," +
+                    "category INTEGER NOT NULL" +
+                    ");");
+        } else if (provider.equalsIgnoreCase("mysql")) {
+            executeStatement("CREATE TABLE IF NOT EXISTS shop_items (" +
+                    "id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY," +
+                    "player_uuid VARCHAR(36) NOT NULL," +
+                    "item_data TEXT NOT NULL," +
+                    "price BIGINT NOT NULL," +
+                    "created_at BIGINT NOT NULL," +
+                    "expires_at BIGINT NOT NULL," +
+                    "category TINYINT UNSIGNED NOT NULL" +
+                    ");");
+        }
 
         ShopDatabaseManager.updateCache();
     }

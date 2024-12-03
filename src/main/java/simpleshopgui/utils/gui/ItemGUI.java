@@ -16,11 +16,11 @@ import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
 
 import simpleshopgui.Plugin;
-import simpleshopgui.utils.colors.ChatColorTranslator;
+import simpleshopgui.utils.chat.ChatColorTranslator;
 import simpleshopgui.utils.shop.ShopUtils;
 
 public class ItemGUI {
-    private static final UUID RANDOM_UUID = UUID.fromString("92864445-51c5-4c3b-9039-517c9927d1b4");
+    private static final UUID randomUUID = UUID.randomUUID();
 
     public static ItemStack getItem(String displayname, List<String> lore, String material,
             List<List<Object>> replacements) {
@@ -137,7 +137,8 @@ public class ItemGUI {
                                                 ShopUtils.getTimeRemaining((double) itemData.get(5)))));
                     }
                 } else {
-                    List<String> lorelist = Plugin.config.getStringList("gui.shop_specific_material.contents.ITEM.lore");
+                    List<String> lorelist = Plugin.config
+                            .getStringList("gui.shop_specific_material.contents.ITEM.lore");
 
                     for (String each : lorelist) {
                         if (!each.contains("&")) {
@@ -186,7 +187,7 @@ public class ItemGUI {
     }
 
     private static PlayerProfile getProfile(String url) {
-        PlayerProfile profile = Bukkit.createPlayerProfile(RANDOM_UUID);
+        PlayerProfile profile = Bukkit.createPlayerProfile(randomUUID);
         PlayerTextures textures = profile.getTextures();
 
         URL urlobject;

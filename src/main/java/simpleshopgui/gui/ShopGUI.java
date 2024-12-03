@@ -13,20 +13,25 @@ import org.bukkit.inventory.Inventory;
 import com.google.common.collect.Lists;
 
 import simpleshopgui.Plugin;
-import simpleshopgui.utils.colors.ChatColorTranslator;
+import simpleshopgui.managers.PlayerGUIManager;
+import simpleshopgui.utils.chat.ChatColorTranslator;
+import simpleshopgui.utils.gui.GUIIdentity;
 import simpleshopgui.utils.gui.ItemGUI;
-import simpleshopgui.utils.players.PlayerUtils;
+import simpleshopgui.utils.player.PlayerUtils;
 import simpleshopgui.utils.shop.ShopUtils;
 
 public class ShopGUI {
 	private final Player player;
 	private final Inventory inventory;
-	public static Map<UUID, String> playerCurrentCategory = new HashMap<UUID, String>();
-	public static Map<UUID, Material> playerCurrentMaterial = new HashMap<UUID, Material>();
+	public static Map<UUID, Integer> playerSelectedCategory = new HashMap<UUID, Integer>();
+	public static Map<UUID, Material> playerSelectedMaterial = new HashMap<UUID, Material>();
 
 	public ShopGUI(Player player) {
 		this.player = player;
-		inventory = Bukkit.createInventory(null, 9 * 4,
+
+		inventory = Bukkit.createInventory(null,
+				!Plugin.config.getBoolean("gui.shop.contents.MY_PROFILE.enabled")
+						&& !Plugin.config.getBoolean("gui.shop.contents.HELP.enabled") ? 9 * 3 : 9 * 4,
 				ChatColorTranslator.translate(Plugin.config.getString("gui.shop.title")));
 
 		initializeItems();
@@ -56,23 +61,25 @@ public class ShopGUI {
 				getConfigStringList("MISCELLANEOUS.lore"), getConfigString("MISCELLANEOUS.material"),
 				null));
 
-		inventory.setItem(27, ItemGUI.getItem(getConfigString("MY_PROFILE.displayname"),
-				getConfigStringList("MY_PROFILE.lore"), getConfigString("MY_PROFILE.material"),
-				Lists.newArrayList(Lists.newArrayList("%player_name%", player.getName()),
-						Lists.newArrayList("%player_balance%",
-								ShopUtils.parseFromDoubleToString(PlayerUtils
-										.getPlayerBalance(player))))));
+		if (Plugin.config.getBoolean("gui.shop.contents.MY_PROFILE.enabled")) {
+			inventory.setItem(27, ItemGUI.getItem(getConfigString("MY_PROFILE.displayname"),
+					getConfigStringList("MY_PROFILE.lore"), getConfigString("MY_PROFILE.material"),
+					Lists.newArrayList(Lists.newArrayList("%player_name%", player.getName()),
+							Lists.newArrayList("%player_balance%",
+									ShopUtils.parseFromDoubleToString(PlayerUtils
+											.getPlayerBalance(player))))));
+		}
 
 		if (Plugin.config.getBoolean("gui.shop.contents.HELP.enabled")) {
 			inventory.setItem(35, ItemGUI.getItem(getConfigString("HELP.displayname"),
-				getConfigStringList("HELP.lore"), getConfigString("HELP.material"), null));
+					getConfigStringList("HELP.lore"), getConfigString("HELP.material"), null));
 		}
 	}
 
 	public void openInventory() {
 		player.openInventory(inventory);
 
-		ShopUtils.setCurrentInventoryId(player, 1);
+		PlayerGUIManager.setCurrentInventoryId(player, GUIIdentity.SHOP_GUI);
 	}
 
 	private String getConfigString(String path) {

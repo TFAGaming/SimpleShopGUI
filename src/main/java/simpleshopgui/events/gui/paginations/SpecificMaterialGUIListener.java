@@ -9,15 +9,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
-import simpleshopgui.Plugin;
-import simpleshopgui.gui.ListedItemsGUI;
+import simpleshopgui.gui.ShopGUI;
+import simpleshopgui.gui.SpecificMaterialGUI;
 import simpleshopgui.managers.ShopDatabaseManager;
-import simpleshopgui.utils.chat.ChatColorTranslator;
 import simpleshopgui.utils.gui.PaginationGUI;
-import simpleshopgui.utils.player.PlayerUtils;
 
-public class ListedItemsGUIListener {
-    public static void listen(InventoryClickEvent event, Player player, PaginationGUI pagegui) {
+public class SpecificMaterialGUIListener {
+    public static void listen(InventoryClickEvent event, Player player, PaginationGUI pagegui, int category) {
         if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) {
             event.setCancelled(true);
             return;
@@ -33,7 +31,7 @@ public class ListedItemsGUIListener {
             return;
         }
 
-        List<List<Object>> listedItems = ShopDatabaseManager.getListedItemsByPlayer(player);
+        List<List<Object>> listedItems = ShopDatabaseManager.getListedItemsByCategory(category, false);
 
         listedItems.sort(Comparator.comparingDouble((List<Object> list) -> (double) list.get(4)).reversed());
 
@@ -52,22 +50,13 @@ public class ListedItemsGUIListener {
             if (itemIndex < listedItems.size() && event.getSlot() < itemsForCurrentPage.size()) {
                 List<Object> item_indexed = listedItems.get(itemIndex);
 
-                if (!PlayerUtils.hasAvailableSlot(player)) {
-                    player.closeInventory();
+                ItemStack item = (ItemStack) item_indexed.get(2);
 
-                    player.sendMessage(ChatColorTranslator
-                                    .translate(Plugin.config.getString("messages.guis.listed.inventory_full")));
-                    return;
-                }
+                ShopGUI.playerSelectedMaterial.put(player.getUniqueId(), item.getType());
 
-                ShopDatabaseManager.removeItemFromShop((int) item_indexed.get(0));
-                player.getInventory().addItem((ItemStack) item_indexed.get(2));
+                SpecificMaterialGUI gui = new SpecificMaterialGUI();
 
-                if (listedItems.size() - 1 > 0) {
-                    ListedItemsGUI.create(player);
-                } else {
-                    player.closeInventory();
-                }
+                gui.create(player);
             }
         }
     }

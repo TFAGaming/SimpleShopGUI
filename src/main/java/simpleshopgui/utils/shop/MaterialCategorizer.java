@@ -7,31 +7,31 @@ import com.google.common.collect.Lists;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemTypeCategorizer {
-    private static final Map<Material, String> map = new HashMap<>();
+public class MaterialCategorizer {
+    private static final Map<Material, Integer> map = new HashMap<>();
 
     static {
         for (Material material : Material.values()) {
             if (isTool(material)) {
-                map.put(material, "Tools");
+                map.put(material, Category.TOOLS);
             } else if (isOre(material)) {
-                map.put(material, "Ore");
+                map.put(material, Category.MINERALS);
             } else if (isNatural(material)) {
-                map.put(material, "Natural");
+                map.put(material, Category.NATURAL);
             } else if (isRedstone(material)) {
-                map.put(material, "Redstone");
+                map.put(material, Category.REDSTONE);
             } else if (material.isEdible()) {
-                map.put(material, "Food");
+                map.put(material, Category.FOOD);
             } else if (material.isBlock()) {
-                map.put(material, "Building Blocks");
+                map.put(material, Category.BUILDING_BLOCKS);
             } else {
-                map.put(material, "Miscellaneous");
+                map.put(material, Category.MISCELLANEOUS);
             }
         }
     }
 
-    public static String getCategory(Material material) {
-        return map.getOrDefault(material, "Miscellaneous");
+    public static int getCategory(Material material) {
+        return map.getOrDefault(material, Category.MISCELLANEOUS);
     }
 
     private static boolean isTool(Material material) {
@@ -46,7 +46,9 @@ public class ItemTypeCategorizer {
                 material.equals(Material.WARPED_FUNGUS_ON_A_STICK) || material.equals(Material.WIND_CHARGE) ||
                 material.equals(Material.COMPASS) || material.equals(Material.RECOVERY_COMPASS) ||
                 material.equals(Material.ELYTRA) || material.equals(Material.FLINT_AND_STEEL) ||
-                material.equals(Material.LEAD) || material.equals(Material.WOLF_ARMOR);
+                material.equals(Material.LEAD) || material.equals(Material.WOLF_ARMOR) ||
+                material.equals(Material.TRIDENT) || material.equals(Material.CROSSBOW) ||
+                material.equals(Material.BOW) ;
     }
 
     private static boolean isOre(Material material) {
@@ -84,7 +86,6 @@ public class ItemTypeCategorizer {
                 Material.RAW_COPPER,
                 Material.RAW_COPPER_BLOCK,
                 Material.RAW_GOLD,
-                Material.RAW_COPPER_BLOCK,
                 Material.RAW_IRON,
                 Material.RAW_IRON_BLOCK).contains(material);
     }

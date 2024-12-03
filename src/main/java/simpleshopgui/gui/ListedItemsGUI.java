@@ -8,19 +8,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import simpleshopgui.Plugin;
+import simpleshopgui.managers.PlayerGUIManager;
 import simpleshopgui.managers.ShopDatabaseManager;
-import simpleshopgui.utils.colors.ChatColorTranslator;
+import simpleshopgui.utils.chat.ChatColorTranslator;
+import simpleshopgui.utils.gui.GUIIdentity;
 import simpleshopgui.utils.gui.ItemGUI;
 import simpleshopgui.utils.gui.PaginationGUI;
-import simpleshopgui.utils.shop.ShopUtils;
 
 public class ListedItemsGUI {
     public static void create(Player player) {
-        List<List<Object>> listed_items = ShopDatabaseManager.getListedItemsByPlayer(player);
+        List<List<Object>> listedItems = ShopDatabaseManager.getListedItemsByPlayer(player);
 
-        listed_items.sort(Comparator.comparingDouble((List<Object> list) -> (double) list.get(4)).reversed());
+        listedItems.sort(Comparator.comparingDouble((List<Object> list) -> (double) list.get(4)).reversed());
 
-        int count = listed_items.size();
+        int count = listedItems.size();
 
         int total_pages = (int) Math.ceil((float) count / 36.0);
 
@@ -41,7 +42,7 @@ public class ListedItemsGUI {
             int endIndex = Math.min(startIndex + 36, count);
 
             for (int i = startIndex; i < endIndex; i++) {
-                List<Object> each = listed_items.get(i);
+                List<Object> each = listedItems.get(i);
 
                 ItemStack item = (ItemStack) each.get(2);
 
@@ -57,6 +58,6 @@ public class ListedItemsGUI {
 
         pagegui.openInventory(pagegui);
 
-        ShopUtils.setCurrentInventoryId(player, 5);
+        PlayerGUIManager.setCurrentInventoryId(player, GUIIdentity.LISTED_ITEMS_GUI);
     }
 }

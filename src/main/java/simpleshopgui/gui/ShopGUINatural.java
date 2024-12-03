@@ -10,19 +10,22 @@ import org.bukkit.inventory.ItemStack;
 import com.google.common.collect.Lists;
 
 import simpleshopgui.Plugin;
+import simpleshopgui.managers.PlayerGUIManager;
 import simpleshopgui.managers.ShopDatabaseManager;
-import simpleshopgui.utils.colors.ChatColorTranslator;
+import simpleshopgui.utils.chat.ChatColorTranslator;
+import simpleshopgui.utils.gui.GUIIdentity;
 import simpleshopgui.utils.gui.ItemGUI;
 import simpleshopgui.utils.gui.PaginationGUI;
+import simpleshopgui.utils.shop.Category;
 import simpleshopgui.utils.shop.ShopUtils;
 
 public class ShopGUINatural {
     public static void create(Player player) {
-        List<List<Object>> listed_items = ShopDatabaseManager.getListedItemsByCategory("Natural", false);
+        List<List<Object>> listedItems = ShopDatabaseManager.getListedItemsByCategory(Category.NATURAL, false);
 
-        listed_items.sort(Comparator.comparingDouble((List<Object> list) -> (double) list.get(4)).reversed());
+        listedItems.sort(Comparator.comparingDouble((List<Object> list) -> (double) list.get(4)).reversed());
 
-        int count = listed_items.size();
+        int count = listedItems.size();
 
         int total_pages = (int) Math.ceil((float) count / 36.0);
 
@@ -33,7 +36,8 @@ public class ShopGUINatural {
         PaginationGUI pagegui = new PaginationGUI(player, 6,
                 ChatColorTranslator.translate(Plugin.config.getString("gui.shop_category.titles.NATURAL")),
                 total_pages);
-        ShopGUI.playerCurrentCategory.put(player.getUniqueId(), "Natural");
+
+        ShopGUI.playerSelectedCategory.put(player.getUniqueId(), Category.NATURAL);
 
         List<List<ItemStack>> pages = new ArrayList<>();
 
@@ -44,7 +48,7 @@ public class ShopGUINatural {
             int endIndex = Math.min(startIndex + 36, count);
 
             for (int i = startIndex; i < endIndex; i++) {
-                List<Object> each = listed_items.get(i);
+                List<Object> each = listedItems.get(i);
 
                 ItemStack item = (ItemStack) each.get(2);
 
@@ -65,6 +69,6 @@ public class ShopGUINatural {
 
         pagegui.openInventory(pagegui);
 
-        ShopUtils.setCurrentInventoryId(player, 2);
+        PlayerGUIManager.setCurrentInventoryId(player, GUIIdentity.CATEGORY_GUI);
     }
 }

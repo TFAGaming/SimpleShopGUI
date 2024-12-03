@@ -16,7 +16,7 @@ import simpleshopgui.Plugin;
 
 public class PaginationGUI {
     public static Map<UUID, Inventory> playerInventory = new HashMap<>();
-    public static Map<UUID, PaginationGUI> instance = new HashMap<>();
+    public static Map<UUID, PaginationGUI> playerPaginationInstance = new HashMap<>();
 
     private Player player;
     private Map<Integer, List<ItemStack>> data = new HashMap<>();
@@ -79,7 +79,7 @@ public class PaginationGUI {
         player.openInventory(inventory);
 
         playerInventory.put(player.getUniqueId(), inventory);
-        instance.put(player.getUniqueId(), pagegui);
+        playerPaginationInstance.put(player.getUniqueId(), pagegui);
     }
 
     private void updatePage(int page_index, boolean clear_inventory) {

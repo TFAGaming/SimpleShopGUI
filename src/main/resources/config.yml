@@ -1,15 +1,36 @@
+# This is the configuration file for the plugin SimpleShopGUI.
+# Do not mess with the values and keys if you don't know how to edit a YAML file!
+# Do not change value types, like integer to string or list to integer... etc.
+
 database:
-  # Supported databases: sqlite
+  # Supported databases: sqlite, postgresql, mysql
   provider: "sqlite"
 
   # SQLite config
-  path: "database.db"
+  sqlite:
+    path: "database.db"
+
+  # PostgreSQL config
+  postgresql:
+    host: "HOST"
+    port: 2565
+    database: "DATABASE_NAME"
+    username: "USERNAME"
+    password: "PASSWORD"
+
+  # MySQL config
+  mysql:
+    host: "HOST"
+    port: 2565
+    database: "DATABASE_NAME"
+    username: "USERNAME"
+    password: "PASSWORD"
 
 shop:
-  max_items_duration: 604800000 # 1 week
-  show_buy_notification: true # Show notification to sellers when there is a player bought one of their items (true = Enable, false = Disable)
-  time_remaining_format: "%days% days, %hours% hours, %minutes% minutes, %seconds% seconds"
-  max_item_price: 100000000000000000000 # 10000,0Q
+  max_items_duration: 604800000 # 1 week. The time should be in milliseconds
+  show_buy_notification: true # Show notification to sellers (if they are online) when there is a player who bought one of their items (true = Enable, false = Disable)
+  time_remaining_format: "%days% days, %hours% hours, %minutes% minutes, %seconds% seconds" # Time format, example: 4 days, 6 hours, 47 minutes, 22 seconds
+  max_item_price: 18446744073709552000 # Maximum price for items. This is important because the database providers integer/bigint values have a limit.
 
 # The items that are not allowed to be listed in shop
 banned_items:
@@ -99,6 +120,7 @@ gui:
         material: LAVA_BUCKET
 
       MY_PROFILE:
+        enabled: true
         displayname: "&9My Profile"
         lore:
           - "&aPlayername: &f%player_name%"
@@ -106,12 +128,12 @@ gui:
         material: "PLAYERHEAD-72c170300a3add5dcbe32a21248b704b09b7feec975e4b39ca9358b65af12462"
 
       HELP:
-        enabled: false
+        enabled: true
         displayname: "&7Help?"
         lore:
           - "&7• &9How to buy an item?"
-          - "&7> &aSelect a category, search for an item you want"
-          - "&ato buy, select the item, and then buy it!"
+          - "&7> &aSelect a category, search for a material you want"
+          - "&ato buy, select the cheapest item, and then buy it!"
           - ""
           - "&7• &9How to sell an item?"
           - "&7> &aHold an item that you want to sell and use the"
@@ -135,7 +157,7 @@ gui:
       ITEM:
         lore:
           - ""
-          - "&aCurrently &b%items_count% &aitems in the shop!"
+          - "&aItems: &b%items_count%"
           - ""
           - "&7Click to Open"
 
@@ -164,7 +186,7 @@ gui:
       ITEM:
         __IF_SHULKER_IS_EMPTY__:
           lore:
-            - "&7(The Shulker Box is Empty)"
+            - "&7(Empty Shulker Box)"
         lore:
           - ""
           - "&7• &aPrice: &f$%item_price%"
@@ -189,6 +211,9 @@ gui:
 # Messages configuration
 messages:
   commands:
+    listed:
+      no_items_listed: "&8[&9Shop&8] &cYou have no items listed in the shop."
+
     sell:
       no_item_in_hand: "&8[&9Shop&8] &cYou are not holding an item to sell!"
       item_is_banned: "&8[&9Shop&8] &cThis item is not allowed to be on shop!"
@@ -199,14 +224,14 @@ messages:
       item_sold: "&8[&9Shop&8] &aThe item &b%item_amount%x %item_name% &ais now listed in the shop!"
 
     shop:
-      invalid_category: "&8[&9Shop&8] &cInvalid category!"
+      invalid_category: "&8[&9Shop&8] &cInvalid shop category!"
   
   guis:
     buy:
       invalid_item: "&8[&9Shop&8] &cThe item does not exist! The seller has removed the item, or someone else purchased the item."
       item_expired: "&8[&9Shop&8] &cThe item is expired; you cannot buy it."
       inventory_full: "&8[&9Shop&8] &cYour inventory is full! Please leave at least one slot empty."
-      player_is_item_seller: "&8[&9Shop&8] &cYou cannot buy the items that you are currently selling! Use &7/listed &cinstead."
+      player_is_item_seller: "&8[&9Shop&8] &cYou cannot buy the items that you are currently selling! Use &7/listed &cto remove the items."
       too_expensive: "&8[&9Shop&8] &cYou don't have enough money to buy this item! Your current balance: $%player_balance%"
     
     listed:
@@ -215,4 +240,4 @@ messages:
   notification:
     player_buy: "&8[&9Shop&8] &aYour &b%item_amount%x %item_name% &ahas been purchased by &b%buyer_name% &afor $%item_price%!"
 
-  permission_error: "&cYou do not have the permission to run this command!"
+  permission_error: "&cYou do not have the permission to run this command."

@@ -1,13 +1,9 @@
 package simpleshopgui.utils.shop;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import org.bukkit.block.ShulkerBox;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
@@ -16,31 +12,6 @@ import com.google.common.collect.Lists;
 import simpleshopgui.Plugin;
 
 public class ShopUtils {
-    public static Map<UUID, Boolean> playerTriggerEvent = new HashMap<UUID, Boolean>();
-    public static Map<UUID, Integer> inventoryCache = new HashMap<UUID, Integer>();
-
-    public static void setCurrentInventoryId(Player player, int id) {
-        inventoryCache.put(player.getUniqueId(), id);
-    }
-
-    public static void removeCurrentInventoryId(Player player) {
-        inventoryCache.remove(player.getUniqueId());
-    }
-
-    public static boolean hasCurrentInventoryIdOpened(Player player) {
-        return inventoryCache.containsKey(player.getUniqueId());
-    }
-
-    public static int getCurrentInventoryId(Player player) {
-        Object value = inventoryCache.get(player.getUniqueId());
-
-        if (value == null) {
-            return -1;
-        }
-
-        return (int) value;
-    }
-
     public static String userFriendlyItemName(String input) {
         String output = "";
 
@@ -160,7 +131,7 @@ public class ShopUtils {
             ItemStack item = shulkerItems[i];
 
             if (item != null) {
-                List<Object> itemData = new ArrayList<>();
+                List<Object> itemData = new ArrayList<Object>();
 
                 itemData.add(item);
                 itemData.add(i);

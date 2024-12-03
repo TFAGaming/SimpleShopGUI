@@ -9,16 +9,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import simpleshopgui.Plugin;
+import simpleshopgui.managers.PlayerGUIManager;
 import simpleshopgui.managers.ShopDatabaseManager;
-import simpleshopgui.utils.colors.ChatColorTranslator;
+import simpleshopgui.utils.chat.ChatColorTranslator;
+import simpleshopgui.utils.gui.GUIIdentity;
 import simpleshopgui.utils.gui.ItemGUI;
 import simpleshopgui.utils.gui.PaginationGUI;
 import simpleshopgui.utils.shop.ItemRarityCategorizer;
 import simpleshopgui.utils.shop.ShopUtils;
 
-public class ShopGUISpecificItem {
+public class SpecificMaterialGUI {
     public void create(Player player) {
-        Material currenMaterial = ShopGUI.playerCurrentMaterial.get(player.getUniqueId());
+        Material currenMaterial = ShopGUI.playerSelectedMaterial.get(player.getUniqueId());
 
         List<List<Object>> listed_items = ShopDatabaseManager.getListedItemsBySpecificMaterial(currenMaterial, false);
 
@@ -63,6 +65,6 @@ public class ShopGUISpecificItem {
 
         pagegui.openInventory(pagegui);
 
-        ShopUtils.setCurrentInventoryId(player, 3);
+        PlayerGUIManager.setCurrentInventoryId(player, GUIIdentity.SPECIFIC_MATERIAL_GUI);
     }
 }

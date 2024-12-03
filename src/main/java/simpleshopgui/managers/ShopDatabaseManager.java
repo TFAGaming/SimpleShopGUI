@@ -19,13 +19,13 @@ import org.bukkit.inventory.ItemStack;
 
 import simpleshopgui.Plugin;
 import simpleshopgui.utils.shop.ItemSerializer;
-import simpleshopgui.utils.shop.ItemTypeCategorizer;
+import simpleshopgui.utils.shop.MaterialCategorizer;
 
 public class ShopDatabaseManager {
     private static final Map<Integer, List<Object>> cache = new HashMap<>();
 
     public static void updateCache() {
-        String sql = "SELECT * FROM sold_items";
+        String sql = "SELECT * FROM shop_items";
 
         try {
             if (!cache.isEmpty()) {
@@ -43,8 +43,8 @@ public class ShopDatabaseManager {
                 String item_data = result.getString("item_data");
                 double price = result.getDouble("price");
                 double created_at = result.getDouble("created_at");
-                double expires = result.getDouble("expires");
-                String category = result.getString("category");
+                double expires = result.getDouble("expires_at");
+                int category = result.getInt("category");
 
                 List<Object> cache_data = new ArrayList<Object>();
 
@@ -66,12 +66,12 @@ public class ShopDatabaseManager {
     }
 
     public static void addItemToShop(Player player, ItemStack item, double price) {
-        String sql = "INSERT INTO sold_items ( " +
+        String sql = "INSERT INTO shop_items ( " +
                 "player_uuid, " +
                 "item_data, " +
                 "price, " +
                 "created_at, " +
-                "expires," +
+                "expires_at," +
                 "category" +
                 ") VALUES (?,?,?,?,?,?)";
 
@@ -84,7 +84,7 @@ public class ShopDatabaseManager {
             statement.setDouble(3, price);
             statement.setDouble(4, System.currentTimeMillis());
             statement.setDouble(5, System.currentTimeMillis() + Plugin.config.getDouble("shop.max_items_duration"));
-            statement.setString(6, ItemTypeCategorizer.getCategory(item.getType()));
+            statement.setInt(6, MaterialCategorizer.getCategory(item.getType()));
             
             statement.execute();
             statement.close();
@@ -96,7 +96,7 @@ public class ShopDatabaseManager {
     }
 
     public static void removeItemFromShop(int itemId) {
-        String sql = "DELETE FROM sold_items WHERE id = ?";
+        String sql = "DELETE FROM shop_items WHERE id = ?";
 
         try {
             Connection connection = Plugin.database.getConnection();
@@ -137,7 +137,7 @@ public class ShopDatabaseManager {
         return arraylist;
     }
 
-    public static List<List<Object>> getListedItemsBySpecificMaterial(Material material, boolean showExpired) {
+    public static List<List<Object>> getListedItemsBySpecificMaterial(Material material, boolean includeExpired) {
         List<List<Object>> arraylist = new ArrayList<List<Object>>();
 
         for (Entry<Integer, List<Object>> entry : cache.entrySet()) {
@@ -158,7 +158,7 @@ public class ShopDatabaseManager {
             }
         }
 
-        if (showExpired) {
+        if (includeExpired) {
             return arraylist;
         } else {
             List<List<Object>> filteredList = new ArrayList<List<Object>>();
@@ -177,14 +177,14 @@ public class ShopDatabaseManager {
         }
     }
 
-    public static List<List<Object>> getListedItemsByCategory(String category, boolean showExpired) {
+    public static List<List<Object>> getListedItemsByCategory(int category, boolean showExpired) {
         List<List<Object>> arraylist = new ArrayList<List<Object>>();
         List<Material> materialsList = new ArrayList<Material>();
 
         for (Entry<Integer, List<Object>> entry : cache.entrySet()) {
             List<Object> data = entry.getValue();
 
-            if (((String) data.get(6)).equals(category)) {
+            if ((int) data.get(6) == category) {
                 List<Object> sub_arraylist = new ArrayList<Object>();
 
                 ItemStack item = ItemSerializer.deserialize((String) data.get(2));
@@ -281,13 +281,13 @@ public class ShopDatabaseManager {
         return -1;
     }
 
-    public static String getCategory(int id) {
+    public static int getCategory(int id) {
         if (cache.containsKey(id)) {
             List<Object> data = cache.get(id);
 
-            return (String) data.get(6);
+            return (int) data.get(6);
         }
 
-        return null;
+        return -1;
     }
 }
